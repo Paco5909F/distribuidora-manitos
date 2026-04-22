@@ -1,0 +1,56 @@
+<svg width="600" height="600" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Refined Paw Symbol -->
+    <symbol id="patita" viewBox="0 0 100 100">
+      <!-- Main Pad -->
+      <path d="M50 90C35 90 20 75 20 55C20 40 35 30 50 30C65 30 80 40 80 55C80 75 65 90 50 90Z" />
+      <!-- Toes -->
+      <circle cx="25" cy="25" r="12" />
+      <circle cx="42" cy="15" r="12" />
+      <circle cx="58" cy="15" r="12" />
+      <circle cx="75" cy="25" r="12" />
+    </symbol>
+    
+    <!-- Refined Bone Symbol -->
+    <symbol id="huesito" viewBox="0 0 100 60">
+      <!-- Middle Stem -->
+      <rect x="25" y="20" width="50" height="20" rx="5" />
+      <!-- Left Knobs -->
+      <circle cx="22" cy="18" r="16" />
+      <circle cx="22" cy="42" r="16" />
+      <!-- Right Knobs -->
+      <circle cx="78" cy="18" r="16" />
+      <circle cx="78" cy="42" r="16" />
+    </symbol>
+  </defs>
+
+  <!-- Clear Background -->
+  <rect width="100%" height="100%" fill="none" />
+
+  <!-- Distributed Items with Variety -->
+  <g fill="#0EA5E9">
+    <!-- Row 1 -->
+    <use href="#patita" x="50" y="50" width="50" height="50" opacity="0.14" transform="rotate(-15, 75, 75)" />
+    <use href="#huesito" x="180" y="30" width="60" height="36" opacity="0.12" transform="rotate(45, 210, 48)" />
+    <use href="#patita" x="350" y="60" width="45" height="45" opacity="0.16" transform="rotate(20, 372, 82)" />
+    <use href="#huesito" x="480" y="80" width="55" height="33" opacity="0.13" transform="rotate(-30, 507, 96)" />
+
+    <!-- Row 2 -->
+    <use href="#huesito" x="30" y="200" width="55" height="33" opacity="0.15" transform="rotate(80, 57, 216)" />
+    <use href="#patita" x="200" y="180" width="60" height="60" opacity="0.12" transform="rotate(-40, 230, 210)" />
+    <use href="#huesito" x="380" y="220" width="65" height="39" opacity="0.14" transform="rotate(10, 412, 239)" />
+    <use href="#patita" x="520" y="190" width="50" height="50" opacity="0.11" transform="rotate(15, 545, 215)" />
+
+    <!-- Row 3 -->
+    <use href="#patita" x="80" y="350" width="55" height="55" opacity="0.13" transform="rotate(110, 107, 377)" />
+    <use href="#huesito" x="250" y="380" width="50" height="30" opacity="0.16" transform="rotate(-15, 275, 395)" />
+    <use href="#patita" x="400" y="360" width="50" height="50" opacity="0.14" transform="rotate(60, 425, 385)" />
+    <use href="#huesito" x="500" y="340" width="60" height="36" opacity="0.12" transform="rotate(25, 530, 358)" />
+
+    <!-- Row 4 -->
+    <use href="#huesito" x="60" y="500" width="65" height="39" opacity="0.12" transform="rotate(-20, 92, 519)" />
+    <use href="#patita" x="220" y="490" width="55" height="55" opacity="0.15" transform="rotate(35, 247, 517)" />
+    <use href="#huesito" x="360" y="520" width="50" height="30" opacity="0.11" transform="rotate(150, 385, 535)" />
+    <use href="#patita" x="500" y="480" width="65" height="65" opacity="0.14" transform="rotate(-10, 532, 512)" />
+  </g>
+</svg>

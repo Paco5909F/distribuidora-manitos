@@ -1,0 +1,77 @@
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  .theme {
+    --font-heading: var(--font-heading);
+    --font-sans: var(--font-sans);
+  }
+  :root {
+    --background: #F8FAFC;
+    --foreground: #0F172A;
+    --card: #FFFFFF;
+    --card-foreground: #0F172A;
+    --popover: #FFFFFF;
+    --popover-foreground: #0F172A;
+    --primary: #0EA5E9;
+    --primary-foreground: #FFFFFF;
+    --secondary: #FFFFFF;
+    --secondary-foreground: #0F172A;
+    --muted: #F1F5F9;
+    --muted-foreground: #64748B;
+    --accent: #F1F5F9;
+    --accent-foreground: #0F172A;
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+    --border: #E2E8F0;
+    --input: #E2E8F0;
+    --ring: #0EA5E9;
+    --radius: 1rem;
+  }
+  .dark {
+    --background: #020617;
+    --foreground: #F8FAFC;
+    --card: #0F172A;
+    --card-foreground: #F8FAFC;
+    --popover: #0F172A;
+    --popover-foreground: #F8FAFC;
+    --primary: #10B981;
+    --primary-foreground: #FFFFFF;
+    --secondary: #1E293B;
+    --secondary-foreground: #F8FAFC;
+    --muted: #1E293B;
+    --muted-foreground: #94A3B8;
+    --accent: #1E293B;
+    --accent-foreground: #F8FAFC;
+    --destructive: #EF4444;
+    --border: #1E293B;
+    --input: #1E293B;
+    --ring: #10B981;
+  }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply text-foreground min-h-screen relative;
+    background-color: #F8FAFC;
+    background-image: 
+      url("/pattern.svg"),
+      radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.08) 0vw, transparent 60vw),
+      radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.08) 0vw, transparent 60vw);
+    background-size: 500px 500px, 100% 100%, 100% 100%;
+    background-repeat: repeat, no-repeat, no-repeat;
+    background-attachment: fixed;
+  }
+  html {
+    @apply font-sans;
+  }
+}
