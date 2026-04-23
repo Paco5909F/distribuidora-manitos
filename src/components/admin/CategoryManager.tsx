@@ -80,12 +80,28 @@ export default function CategoryManager() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm("¿Seguro que deseas eliminar esta categoría? Si tiene productos asociados, la base de datos no te dejará borrarla.")) return;
+    if (!confirm("¿Seguro que deseas eliminar esta categoría? Solo se borrará si no hay productos activos usándola.")) return;
     
-    // Attempt delete
+    // Verificar si hay productos activos
+    const { data: activeProducts } = await supabase
+      .from("productos")
+      .select("id")
+      .eq("categoria_id", id)
+      .eq("activo", true)
+      .limit(1);
+
+    if (activeProducts && activeProducts.length > 0) {
+      alert("No puedes eliminar esta categoría porque está vinculada a productos ACTIVOS.");
+      return;
+    }
+
+    // Desvincular productos inactivos (borrado lógico previo) para no violar llave foránea
+    await supabase.from("productos").update({ categoria_id: null }).eq("categoria_id", id).eq("activo", false);
+
+    // Intentar borrar la categoría
     const { error } = await supabase.from("categorias").delete().eq("id", id);
     if (error) {
-      alert("No puedes eliminar esta categoría porque está siendo usada por productos en el catálogo.");
+      alert("No puedes eliminar esta categoría por razones de integridad en la base de datos.");
     } else {
       fetchCategories();
     }
