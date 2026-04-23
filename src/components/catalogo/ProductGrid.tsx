@@ -86,16 +86,23 @@ export default function ProductGrid() {
       <aside className="w-full md:w-64 flex-shrink-0 flex flex-col gap-6">
         <div className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 flex flex-col gap-4 sticky top-[100px]">
           <h3 className="font-heading font-black text-lg text-foreground">Buscador</h3>
-          <form className="relative" onSubmit={handleSearchSubmit}>
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+          <form className="relative flex items-center" onSubmit={handleSearchSubmit}>
+            <Search className="absolute left-3 text-gray-400" size={18} />
             <input
               type="text"
               enterKeyHint="search"
               placeholder="Ej: Collares, Pretales..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+              className="w-full pl-10 pr-12 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
             />
+            <button
+              type="submit"
+              className="absolute right-2 p-1 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg transition-colors flex items-center justify-center"
+              aria-label="Buscar"
+            >
+              <ChevronRight size={18} strokeWidth={3} />
+            </button>
           </form>
 
           {debugMsg && <p className="text-red-500 text-xs font-bold border border-red-500 p-2 rounded-lg">{debugMsg}</p>}
