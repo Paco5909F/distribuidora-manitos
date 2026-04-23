@@ -24,6 +24,7 @@ export default function Footer() {
               alt="Distribuidora Manitos Logo"
               width={40}
               height={40}
+              priority
               className="group-hover:scale-110 transition-transform"
             />
             <span className="font-heading text-xl font-bold text-white">

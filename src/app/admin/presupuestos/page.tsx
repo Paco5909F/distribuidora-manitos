@@ -3,7 +3,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Product } from "@/services/products";
-import { Search, Plus, Trash2, FileDown, Send } from "lucide-react";
+import { Search, Plus, Trash2, FileDown } from "lucide-react";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import dynamic from "next/dynamic";
 import type { BudgetItem, BudgetData } from "@/components/admin/BudgetPDF";
 
@@ -220,7 +221,7 @@ export default function PresupuestosPage() {
                   <select
                     value={ajusteTipo}
                     onChange={e => setAjusteTipo(e.target.value as any)}
-                    className="flex-1 border-b border-gray-300 py-2 outline-none focus:border-primary text-xs font-bold bg-transparent"
+                    className="flex-1 border-b border-gray-300 py-2 outline-none focus:border-primary focus:border-b-2 font-medium text-foreground bg-transparent transition-all text-sm cursor-pointer"
                   >
                     <option value="ninguno">Sin ajuste</option>
                     <option value="descuento">Descuento</option>
@@ -399,8 +400,8 @@ export default function PresupuestosPage() {
                     rel="noopener noreferrer"
                     className="w-full flex items-center justify-center gap-2 py-4 bg-[#25D366] text-white rounded-xl font-bold uppercase tracking-widest text-xs sm:text-sm hover:bg-[#20BE5C] transition-colors"
                   >
-                    <Send size={18} />
-                    Enviar por WhatsApp
+                    <WhatsAppIcon size={18} />
+                    Enviar
                   </a>
                 </div>
               </div>

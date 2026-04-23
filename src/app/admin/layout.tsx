@@ -21,7 +21,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="fixed inset-0 z-0 bg-[url('/pattern.svg')] opacity-100 mix-blend-multiply pointer-events-none"></div>
       
       {/* Mobile Header (Hidden on Desktop) */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-100 flex items-center justify-between px-5 shadow-sm z-40">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-100 flex items-center justify-between px-5 shadow-sm z-[60]">
         <div className="flex items-center gap-3">
            <img src="/brand/logo.png" alt="Logo" className="h-8 w-8 object-contain" />
            <span className="font-heading font-black text-foreground">Panel Admin</span>
@@ -34,13 +34,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Mobile Backdrop Overlay */}
       {isSidebarOpen && (
         <div 
-          className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
+          className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <aside className={`w-[280px] bg-white shadow-[10px_0_40px_rgba(0,0,0,0.03)] border-r border-gray-100 p-6 flex flex-col fixed inset-y-0 left-0 z-50 transition-transform duration-300 ease-out ${
+      <aside className={`w-[280px] bg-white shadow-[10px_0_40px_rgba(0,0,0,0.03)] border-r border-gray-100 p-6 flex flex-col fixed inset-y-0 left-0 z-[70] transition-transform duration-300 ease-out ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
       }`}>
         

@@ -29,7 +29,7 @@ export default function Navbar() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-      className={`fixed left-0 right-0 z-50 flex justify-center px-4 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+      className={`fixed left-0 right-0 z-[100] flex justify-center px-4 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
         isScrolled ? "top-2 md:top-3" : "top-0 pt-4"
       }`}
     >
@@ -45,7 +45,7 @@ export default function Navbar() {
               src="/brand/logo.png" 
               alt="Distribuidora Manitos Logo" 
               fill
-              className="object-contain hover:scale-105 transition-transform origin-left" 
+              className="object-contain object-left md:object-center hover:scale-105 transition-transform origin-left" 
             />
           </div>
         </Link>
@@ -93,7 +93,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="md:hidden absolute top-[70px] left-5 right-5 bg-white/95 backdrop-blur-2xl border border-primary/20 rounded-3xl shadow-2xl flex flex-col items-center py-6 gap-5 z-40 overflow-hidden"
+            className="md:hidden absolute top-[70px] left-5 right-5 bg-white/95 backdrop-blur-2xl border border-primary/20 rounded-3xl shadow-2xl flex flex-col items-center py-6 gap-5 z-[100] overflow-hidden"
           >
             {navLinks.map((link) => (
               <motion.div
