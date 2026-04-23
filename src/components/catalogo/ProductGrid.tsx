@@ -167,7 +167,7 @@ export default function ProductGrid() {
 
       {/* Product Modal */}
       {selectedProduct && (
-        <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center md:p-6">
+        <div className="fixed inset-0 z-[110] flex items-end md:items-center justify-center md:p-6">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedProduct(null)} />
           <div className="relative w-full max-w-3xl bg-white md:rounded-3xl rounded-t-3xl md:h-auto h-[90dvh] shadow-2xl overflow-y-auto overflow-x-hidden flex flex-col md:flex-row animate-in slide-in-from-bottom-10 md:zoom-in-95 duration-300">
 
@@ -195,7 +195,7 @@ export default function ProductGrid() {
               ) : null}
 
               {/* Fallback */}
-              <div className={`w-full h-full flex flex-col items-center justify-center text-gray-300 border-2 border-dashed border-gray-100 rounded-2xl absolute inset-0 m-6 bg-white ${selectedProduct.image_url ? 'hidden' : ''}`}>
+              <div className={`flex flex-col items-center justify-center text-gray-300 border-2 border-dashed border-gray-100 rounded-2xl absolute inset-6 bg-white ${selectedProduct.image_url ? 'hidden' : ''}`}>
                 <span className="text-lg font-medium">Sin imagen</span>
               </div>
             </div>

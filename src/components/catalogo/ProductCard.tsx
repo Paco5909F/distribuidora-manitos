@@ -38,7 +38,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
         ) : null}
         
         {/* Fallback shown if no image_url or if image fails to load */}
-        <div className={`w-full h-full flex items-center justify-center text-gray-300 border-2 border-dashed border-gray-100 rounded-xl absolute inset-0 m-4 bg-white ${product.image_url ? 'hidden' : ''}`}>
+        <div className={`flex items-center justify-center text-gray-300 border-2 border-dashed border-gray-100 rounded-xl absolute inset-4 bg-white ${product.image_url ? 'hidden' : ''}`}>
           <span className="text-sm font-medium">Sin imagen</span>
         </div>
       </div>
