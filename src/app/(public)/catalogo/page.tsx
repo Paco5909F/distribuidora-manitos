@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 
 export default function CatalogoPage() {
   return (
-    <div className="min-h-screen pt-24 pb-20 px-4 md:px-6 max-w-7xl mx-auto flex flex-col relative z-0">
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent -z-10 h-96 rounded-b-[100px]" />
+    <div className="min-h-[100dvh] pt-24 pb-20 px-4 md:px-6 max-w-7xl mx-auto flex flex-col relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent h-96 rounded-b-[100px] pointer-events-none" />
       
-      <header className="mb-10 text-center md:text-left">
+      <header className="mb-10 text-center md:text-left relative z-10">
         <h1 className="font-heading text-4xl md:text-5xl font-black text-foreground tracking-tight mb-4">
           Catálogo <span className="text-primary">Manitos</span>
         </h1>
