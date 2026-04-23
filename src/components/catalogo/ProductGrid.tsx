@@ -74,22 +74,29 @@ export default function ProductGrid() {
     return `https://wa.me/5492352407359?text=${encodeURIComponent(message)}`;
   };
 
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    (document.activeElement as HTMLElement)?.blur(); // Ocultar teclado en mobile
+    document.getElementById("productos-grid")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div className="flex flex-col md:flex-row gap-8">
       {/* Sidebar: Filters & Search */}
       <aside className="w-full md:w-64 flex-shrink-0 flex flex-col gap-6">
         <div className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 flex flex-col gap-4 sticky top-[100px]">
           <h3 className="font-heading font-black text-lg text-foreground">Buscador</h3>
-          <div className="relative">
+          <form className="relative" onSubmit={handleSearchSubmit}>
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
             <input
               type="text"
+              enterKeyHint="search"
               placeholder="Ej: Collares, Pretales..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
             />
-          </div>
+          </form>
 
           {debugMsg && <p className="text-red-500 text-xs font-bold border border-red-500 p-2 rounded-lg">{debugMsg}</p>}
           <h3 className="font-heading font-black text-lg text-foreground mt-4">Categorías</h3>
@@ -116,7 +123,7 @@ export default function ProductGrid() {
       </aside>
 
       {/* Main Content: Grid & Pagination */}
-      <main className="flex-1 flex flex-col gap-8">
+      <main id="productos-grid" className="flex-1 flex flex-col gap-8 scroll-mt-24">
         {/* Results Info */}
         <div className="flex items-center justify-between text-sm text-gray-500 font-medium">
           <span>Mostrando {products.length} de {totalProducts} productos</span>
