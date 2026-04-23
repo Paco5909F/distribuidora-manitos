@@ -4,7 +4,7 @@ import { MessageCircle } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center pt-20 px-6 overflow-hidden relative">
+    <div className="min-h-[calc(100dvh-80px)] flex flex-col items-center justify-center pt-20 px-6 overflow-hidden relative">
       {/* Background sutil */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent -z-10" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[100px] pointer-events-none -z-10" />

@@ -53,7 +53,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={cn("font-sans scroll-smooth", inter.variable, outfit.variable)}>
-      <body className="antialiased min-h-screen flex flex-col bg-background text-foreground">
+      <body className="antialiased min-h-[100dvh] flex flex-col bg-background text-foreground">
         {children}
       </body>
     </html>
