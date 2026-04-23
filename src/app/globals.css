@@ -71,6 +71,9 @@
     background-repeat: repeat, no-repeat, no-repeat;
     background-attachment: fixed;
   }
+  html, body {
+    overscroll-behavior-y: none;
+  }
   html {
     @apply font-sans;
   }
