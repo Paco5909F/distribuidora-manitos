@@ -94,7 +94,7 @@ export default function ProductGrid() {
               placeholder="Ej: Collares, Pretales..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-12 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+              className="w-full pl-10 pr-12 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-base outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
             />
             <button
               type="submit"
