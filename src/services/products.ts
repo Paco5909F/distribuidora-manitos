@@ -17,45 +17,78 @@ export interface FetchProductsOptions {
   search?: string;
 }
 
+const normalize = (text: string) =>
+  text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+const variants = (word: string) => {
+  if (word.length <= 3) return [word];
+  if (word.endsWith("es")) return [word, word.slice(0, -2)];
+  if (word.endsWith("s")) return [word, word.slice(0, -1)];
+  return [word];
+};
+
+const synonyms: Record<string, string[]> = {
+  pulga: ["pulgicida", "antipulga", "pipeta"],
+  pulgas: ["pulgicidas", "antipulgas", "pipetas"],
+  collar: ["collares"],
+  collares: ["collar"],
+  pelota: ["pelotas"],
+  pelotas: ["pelota"],
+};
+
+const applySmartSearch = (baseQuery: any, searchInput: string) => {
+  const normalized = normalize(searchInput);
+  const words = normalized.split(/\s+/).filter(w => w.length > 0);
+  let query = baseQuery;
+
+  words.forEach(word => {
+    const termVariants = variants(word);
+    const expandedTerms = new Set<string>();
+    
+    termVariants.forEach(v => {
+      expandedTerms.add(v);
+      if (synonyms[v]) synonyms[v].forEach(s => expandedTerms.add(s));
+    });
+
+    const orConditions = Array.from(expandedTerms).map(term => 
+      `nombre.ilike.%${term}%,categoria.ilike.%${term}%`
+    ).join(',');
+
+    query = query.or(orConditions);
+  });
+
+  return query;
+};
+
 export async function getProducts({ page, limit, category, search }: FetchProductsOptions) {
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
-  let data: any[] | null = [];
-  let count = 0;
-  let error;
+  let query = supabase
+    .from('v_productos')
+    .select('id, nombre, precio, categoria, activo, updated_at', { count: 'exact' })
+    .eq('activo', true)
+    .order('nombre', { ascending: true });
+
+  if (category && category !== 'Todas') {
+    query = query.eq('categoria', category);
+  }
 
   if (search) {
-    // Usamos el Helper RPC 'buscar_producto' definido en script.sql
-    const res = await supabase.rpc('buscar_producto', { query: search });
-    data = res.data;
-    error = res.error;
-    // RPC no soporta count exacto automático con pagination fácilmente,
-    // pero limitamos a 50 según el script.sql
-    if (data) count = data.length;
-  } else {
-    // Usamos la vista 'v_productos' definida en script.sql
-    let query = supabase
-      .from('v_productos')
-      .select('id, nombre, precio, categoria, activo, updated_at', { count: 'exact' })
-      .eq('activo', true)
-      .order('nombre', { ascending: true })
-      .range(from, to);
-
-    if (category && category !== 'Todas') {
-      query = query.eq('categoria', category);
-    }
-
-    const res = await query;
-    data = res.data;
-    count = res.count || 0;
-    error = res.error;
+    query = applySmartSearch(query, search);
   }
 
-  if (error) {
-    console.error('Error fetching products:', error);
+  query = query.range(from, to);
+
+  const res = await query;
+  
+  if (res.error) {
+    console.error('Error fetching products:', res.error);
     return { data: [] as Product[], count: 0 };
   }
+
+  let data = res.data || [];
+  let count = res.count || 0;
 
   // Mapear image_url dinámicamente ya que no está en la base de datos (según script.sql)
   const mappedData = data?.map(p => ({

@@ -127,7 +127,7 @@ export default function ProductGrid() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {Array.from({ length: 12 }).map((_, i) => (
               <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full opacity-60">
-                <div className="w-full aspect-square bg-gray-100 animate-pulse border-b border-gray-50" />
+                <div className="w-full aspect-square bg-gray-100 animate-pulse border-b border-gray-50 shrink-0" />
                 <div className="p-4 md:p-5 flex flex-col gap-3">
                   <div className="h-3 w-1/3 bg-gray-200 rounded animate-pulse" />
                   <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse" />
