@@ -124,8 +124,17 @@ export default function ProductGrid() {
 
         {/* Grid */}
         {loading ? (
-          <div className="w-full h-64 flex items-center justify-center">
-            <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full opacity-60">
+                <div className="w-full aspect-square bg-gray-100 animate-pulse border-b border-gray-50" />
+                <div className="p-4 md:p-5 flex flex-col gap-3">
+                  <div className="h-3 w-1/3 bg-gray-200 rounded animate-pulse" />
+                  <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse" />
+                  <div className="h-6 w-1/2 bg-gray-200 rounded animate-pulse mt-4" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : products.length === 0 ? (
           <div className="w-full h-64 flex flex-col items-center justify-center bg-white rounded-3xl border border-gray-100 p-8 text-center space-y-4">
@@ -182,11 +191,12 @@ export default function ProductGrid() {
             {/* Image Container */}
             <div className="w-full md:w-1/2 aspect-square md:min-h-[400px] bg-white relative border-b md:border-b-0 md:border-r border-gray-100 flex items-center justify-center p-4 md:p-8 shrink-0">
               {selectedProduct.image_url ? (
-                <img
+                <Image
                   src={selectedProduct.image_url}
                   alt={selectedProduct.nombre}
-                  loading="lazy"
-                  className="object-contain p-6 w-full h-full"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-contain p-6"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.nextElementSibling?.classList.remove('hidden');
