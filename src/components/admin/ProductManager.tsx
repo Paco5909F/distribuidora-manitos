@@ -409,14 +409,21 @@ export default function ProductManager() {
               <div className="flex flex-col gap-2 mt-3 p-4 bg-white border border-gray-100 rounded-xl">
                 <div className="flex items-center gap-3">
                   <div className="w-16 h-16 bg-gray-50 rounded-lg border border-gray-100 flex items-center justify-center relative overflow-hidden shrink-0">
-                    {products.find(p => p.id === editingId)?.image_url ? (
+                    <>
                       <img 
                         src={products.find(p => p.id === editingId)?.image_url} 
                         alt="Preview" 
                         style={{width:'100%', height:'100%', objectFit:'contain', padding:'2px', cursor:'zoom-in'}} 
                         onClick={() => setViewerImage(products.find(p => p.id === editingId)?.image_url || null)}
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                        }}
                       />
-                    ) : <ImageIcon className="text-gray-200" size={20} />}
+                      <div className="hidden w-full h-full flex items-center justify-center">
+                        <ImageIcon className="text-gray-200" size={20} />
+                      </div>
+                    </>
                   </div>
                   <div>
                     <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Archivo en Storage</p>
