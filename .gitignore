@@ -32,3 +32,8 @@ yarn-error.log*
 coverage/
 .nyc_output/
 .turbo/
+
+# Agents
+.agents/
+AGENTS.md
+AGENTS.local.md
