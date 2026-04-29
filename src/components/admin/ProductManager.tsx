@@ -237,14 +237,66 @@ export default function ProductManager() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm("¿Seguro que deseas eliminar este producto remotamente?")) return;
+    if (!confirm("¿Seguro que deseas eliminar este producto DEFINITIVAMENTE? Esto borrará su imagen y todos sus datos sin posibilidad de recuperación.")) return;
+    setLoading(true);
+    setMsg("Eliminando imagen del bucket...");
     
-    const { error } = await supabase.from("productos").update({ activo: false }).eq("id", id);
+    // 1. Borramos la imagen física de Storage
+    await supabase.storage.from("imagenes").remove([`productos/${id}.jpg`, `productos/${id}.webp`]);
+    
+    // 2. Borramos el producto físicamente de la base de datos (Hard Delete)
+    setMsg("Eliminando producto de la base de datos...");
+    const { error } = await supabase.from("productos").delete().eq("id", id);
+    
     if (!error) {
-      setMsg("Producto eliminado.");
+      setMsg("Producto e imagen eliminados por completo.");
       fetchProducts(search);
       if (editingId === id) resetForm();
+    } else {
+      setMsg("Error al eliminar producto: " + error.message);
     }
+    setLoading(false);
+  };
+
+  const cleanOrphanImages = async () => {
+    if (!confirm("Esto escaneará tu bucket 'imagenes/productos/' y borrará TODAS las fotos que no correspondan a un ID de producto activo en tu Base de Datos. ¿Continuar?")) return;
+    setLoading(true);
+    setMsg("Obteniendo inventario...");
+    
+    try {
+      // 1. Obtener todos los IDs
+      const { data: allProducts, error: dbErr } = await supabase.from("productos").select("id");
+      if (dbErr) throw dbErr;
+      const validIds = new Set(allProducts?.map(p => p.id) || []);
+      
+      // 2. Obtener lista de archivos en el bucket
+      setMsg("Analizando archivos en el Storage...");
+      const { data: files, error: storageErr } = await supabase.storage.from("imagenes").list("productos", { limit: 5000 });
+      if (storageErr) throw storageErr;
+      if (!files) { setLoading(false); return; }
+
+      // 3. Filtrar huérfanos (los que no están en validIds y no son carpetas placeholder)
+      const orphans = files.filter(f => {
+         if (f.name === '.emptyFolderPlaceholder' || f.name === '') return false;
+         const match = f.name.match(/^(\d+)\.(webp|jpg|png|jpeg)$/);
+         if (!match) return false; // si no sigue la nomenclatura id.extensión, lo ignoramos para no borrar basura que no conocemos
+         const id = parseInt(match[1]);
+         return !validIds.has(id);
+      }).map(f => `productos/${f.name}`);
+
+      // 4. Eliminar huérfanos
+      if (orphans.length > 0) {
+         setMsg(`Eliminando ${orphans.length} imágenes basura...`);
+         const { error: rmErr } = await supabase.storage.from("imagenes").remove(orphans);
+         if (rmErr) throw rmErr;
+         setMsg(`Limpieza exitosa: ${orphans.length} imágenes huérfanas eliminadas.`);
+      } else {
+         setMsg("Inventario perfecto. No se encontraron imágenes huérfanas.");
+      }
+    } catch (err: any) {
+      setMsg("Error en la limpieza: " + err.message);
+    }
+    setLoading(false);
   };
 
   return (
@@ -254,8 +306,17 @@ export default function ProductManager() {
       <div className="w-full lg:w-1/2 p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-gray-100 flex flex-col">
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
-             <h2 className="text-xl font-heading font-black text-foreground">Catálogo Completo</h2>
-             <span className="bg-primary/10 text-primary text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">{products.length} Items</span>
+             <div className="flex items-center gap-3">
+               <h2 className="text-xl font-heading font-black text-foreground">Catálogo Completo</h2>
+               <span className="bg-primary/10 text-primary text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">{products.length} Items</span>
+             </div>
+             <button 
+               onClick={cleanOrphanImages} 
+               className="text-xs font-bold text-gray-500 hover:text-red-600 bg-gray-100 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2"
+               title="Buscar y eliminar imágenes sin producto en la Base de Datos"
+             >
+               🧹 Limpiar Storage
+             </button>
           </div>
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
@@ -283,7 +344,11 @@ export default function ProductManager() {
                             <img 
                               src={prod.image_url} 
                               alt={prod.nombre} 
-                              style={{width:'100%', height:'100%', objectFit:'contain', padding:'2px'}} 
+                              style={{width:'100%', height:'100%', objectFit:'contain', padding:'2px', cursor:'zoom-in'}} 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open(prod.image_url, '_blank');
+                              }}
                               onError={(e) => { 
                                 if (prod.image_url_fallback && !e.currentTarget.src.includes('.jpg')) {
                                   e.currentTarget.src = prod.image_url_fallback;
@@ -415,7 +480,25 @@ export default function ProductManager() {
               )}
             </div>
             {editingId && (
-              <p className="text-xs text-gray-400 mt-2 font-medium">Nota: Subir una imagen reemplazará la actual del producto.</p>
+              <div className="flex flex-col gap-2 mt-3 p-4 bg-white border border-gray-100 rounded-xl">
+                <div className="flex items-center gap-3">
+                  <div className="w-16 h-16 bg-gray-50 rounded-lg border border-gray-100 flex items-center justify-center relative overflow-hidden shrink-0">
+                    {products.find(p => p.id === editingId)?.image_url ? (
+                      <img 
+                        src={products.find(p => p.id === editingId)?.image_url} 
+                        alt="Preview" 
+                        style={{width:'100%', height:'100%', objectFit:'contain', padding:'2px', cursor:'zoom-in'}} 
+                        onClick={() => window.open(products.find(p => p.id === editingId)?.image_url, '_blank')}
+                      />
+                    ) : <ImageIcon className="text-gray-200" size={20} />}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Archivo en Storage</p>
+                    <code className="text-xs font-mono text-primary bg-primary/5 px-2 py-1 rounded">productos/{editingId}.webp</code>
+                  </div>
+                </div>
+                <p className="text-[11px] text-gray-400 font-medium">Nota: Subir una imagen reemplazará automáticamente la actual.</p>
+              </div>
             )}
           </div>
 

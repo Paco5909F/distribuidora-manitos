@@ -75,7 +75,7 @@ export default function Contact() {
               <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                 <Mail size={28} />
               </div>
-              <span className="font-medium text-foreground/80 tracking-wide text-center text-sm md:text-base break-all">hola@distribuidoramanitos.com</span>
+              <span className="font-medium text-foreground/80 tracking-wide text-center text-sm md:text-base break-all">hola@manitos.com</span>
             </a>
 
             <a
