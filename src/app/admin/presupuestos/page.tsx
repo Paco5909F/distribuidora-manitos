@@ -154,7 +154,7 @@ export default function PresupuestosPage() {
     const productosTexto = items.map(i => `- ${i.nombre} x${i.cantidad}`).join('\n');
     return encodeURIComponent(
       `Hola, le comparto el presupuesto solicitado.\n\n` +
-      `Cliente: ${cliente || 'Consumidor Final'}\n\n` +
+      `Cliente: ${cliente.trim()}\n\n` +
       `${items.length ? `Productos:\n${productosTexto}\n\n` : ''}` +
       `Total: $${totalFinal.toLocaleString('es-AR')}\n\n` +
       `Este mensaje incluye el detalle completo en PDF.\n\n` +
@@ -423,21 +423,37 @@ export default function PresupuestosPage() {
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-2 gap-3 mt-4 md:mt-6">
-                  <PDFButton
-                    data={budgetData}
-                    fileName={fileName}
-                  />
+                  {!cliente.trim() ? (
+                    <button 
+                      onClick={() => alert('⚠️ Por favor, ingresa el Nombre del Cliente en la parte superior antes de generar el presupuesto.')} 
+                      className="w-full flex items-center justify-center gap-3 py-4 bg-gray-200 text-gray-400 rounded-xl font-bold uppercase tracking-widest text-sm cursor-not-allowed"
+                    >
+                      <FileDown size={18} /> Generar PDF
+                    </button>
+                  ) : (
+                    <PDFButton
+                      data={budgetData}
+                      fileName={fileName}
+                    />
+                  )}
 
-
-                  <a
-                    href={wppLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 py-4 bg-[#25D366] text-white rounded-xl font-bold uppercase tracking-widest text-xs sm:text-sm hover:bg-[#20BE5C] transition-colors"
-                  >
-                    <WhatsAppIcon size={18} />
-                    Enviar
-                  </a>
+                  {!cliente.trim() ? (
+                    <button 
+                      onClick={() => alert('⚠️ Por favor, ingresa el Nombre del Cliente en la parte superior antes de enviarlo por WhatsApp.')} 
+                      className="w-full flex items-center justify-center gap-2 py-4 bg-gray-200 text-gray-400 rounded-xl font-bold uppercase tracking-widest text-xs sm:text-sm cursor-not-allowed"
+                    >
+                      <WhatsAppIcon size={18} /> Enviar
+                    </button>
+                  ) : (
+                    <a
+                      href={wppLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center gap-2 py-4 bg-[#25D366] text-white rounded-xl font-bold uppercase tracking-widest text-xs sm:text-sm hover:bg-[#20BE5C] transition-colors"
+                    >
+                      <WhatsAppIcon size={18} /> Enviar
+                    </a>
+                  )}
                 </div>
               </div>
 

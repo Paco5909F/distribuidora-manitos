@@ -273,7 +273,7 @@ export const BudgetDocument = ({ data }: { data: BudgetData }) => {
         <View style={styles.dataBox}>
           <View style={styles.dataCol}>
             <Text style={styles.dataLabel}>RAZÓN SOCIAL / NOMBRE</Text>
-            <Text style={styles.dataValue}>{data.cliente || 'Consumidor Final'}</Text>
+            <Text style={styles.dataValue}>{data.cliente}</Text>
           </View>
           <View style={styles.dataCol}>
             <Text style={styles.dataLabel}>LOCALIDAD</Text>
