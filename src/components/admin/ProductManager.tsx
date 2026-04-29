@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Plus, Edit2, Trash2, Image as ImageIcon, AlertCircle, RefreshCw } from "lucide-react";
+import { Search, Plus, Edit2, Trash2, Image as ImageIcon, AlertCircle, RefreshCw, X } from "lucide-react";
 import Image from "next/image";
 import { createClient } from "@/utils/supabase/client";
 import { useAdminProducts } from "@/hooks/useAdminProducts";
@@ -58,6 +58,7 @@ export default function ProductManager() {
   const { products, state: prodState, errorMessage: prodError, fetchProducts } = useAdminProducts();
   
   const [search, setSearch] = useState("");
+  const [viewerImage, setViewerImage] = useState<string | null>(null);
   
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
@@ -207,6 +208,7 @@ export default function ProductManager() {
   };
 
   return (
+    <>
     <div className="bg-white rounded-3xl shadow-sm border border-gray-100 mt-8 overflow-hidden flex flex-col lg:flex-row">
       
       {/* Lado Izquierdo: Buscador y Lista */}
@@ -271,7 +273,7 @@ export default function ProductManager() {
                               style={{width:'100%', height:'100%', objectFit:'contain', padding:'2px', cursor:'zoom-in'}} 
                               onClick={(e) => {
                                 e.stopPropagation();
-                                window.open(prod.image_url, '_blank');
+                                setViewerImage(prod.image_url || null);
                               }}
                               onError={(e) => { 
                                 if (prod.image_url_fallback && !e.currentTarget.src.includes('.jpg')) {
@@ -412,7 +414,7 @@ export default function ProductManager() {
                         src={products.find(p => p.id === editingId)?.image_url} 
                         alt="Preview" 
                         style={{width:'100%', height:'100%', objectFit:'contain', padding:'2px', cursor:'zoom-in'}} 
-                        onClick={() => window.open(products.find(p => p.id === editingId)?.image_url, '_blank')}
+                        onClick={() => setViewerImage(products.find(p => p.id === editingId)?.image_url || null)}
                       />
                     ) : <ImageIcon className="text-gray-200" size={20} />}
                   </div>
@@ -447,5 +449,25 @@ export default function ProductManager() {
       </div>
 
     </div>
+
+      {viewerImage && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200" onClick={() => setViewerImage(null)}>
+          <button 
+            onClick={() => setViewerImage(null)}
+            className="absolute top-4 right-4 text-white hover:text-gray-300 p-2 z-10 bg-black/20 hover:bg-black/40 rounded-full transition-colors"
+          >
+            <X size={24} />
+          </button>
+          <div className="relative w-full max-w-4xl h-[80dvh] flex items-center justify-center">
+            <img 
+              src={viewerImage} 
+              alt="Visor" 
+              className="max-w-full max-h-full object-contain rounded-xl shadow-2xl animate-in zoom-in-95 duration-300"
+            />
+          </div>
+        </div>
+      )}
+
+    </>
   );
 }
