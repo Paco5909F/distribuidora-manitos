@@ -80,7 +80,8 @@ export default function ProductGrid() {
   };
 
   const createWhatsAppLink = (product: Product) => {
-    const message = `Hola, estuve viendo su catálogo online y me interesa conocer más sobre: *${product.nombre}*.\n\n¿Podrían brindarme información sobre precio y disponibilidad?`;
+    const categoriaTexto = product.categoria ? `${product.categoria} - ` : "";
+    const message = `Hola, estuve viendo su catálogo online y me interesa conocer más sobre: *${categoriaTexto}${product.nombre}*.\n\n¿Podrían brindarme información sobre precio y disponibilidad?`;
     return getWhatsAppLink(message);
   };
 
