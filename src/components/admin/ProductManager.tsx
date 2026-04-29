@@ -73,6 +73,7 @@ export default function ProductManager() {
   
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -89,6 +90,7 @@ export default function ProductManager() {
     setCategoriaId("");
     setFile(null);
     setMsg("");
+    setImageError(false);
   };
 
   const selectForEdit = (prod: DbProduct) => {
@@ -98,6 +100,7 @@ export default function ProductManager() {
     setCategoriaId(prod.categoria_id?.toString() || "");
     setFile(null);
     setMsg("");
+    setImageError(false);
   };
 
   const totalPages = Math.ceil(products.length / itemsPerPage);
@@ -182,6 +185,7 @@ export default function ProductManager() {
     const nb = Date.now();
     setMsg("Imagen removida con éxito.");
     fetchProducts(search, nb);
+    setImageError(true);
     setLoading(false);
   };
 
@@ -394,7 +398,7 @@ export default function ProductManager() {
                 onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
                 className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl outline-none text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:uppercase file:tracking-wider file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-all cursor-pointer"
               />
-              {editingId && (
+              {editingId && !imageError && (
                 <button 
                   type="button" 
                   onClick={handleDeleteImage} 
@@ -413,21 +417,36 @@ export default function ProductManager() {
                       <img 
                         src={products.find(p => p.id === editingId)?.image_url} 
                         alt="Preview" 
-                        style={{width:'100%', height:'100%', objectFit:'contain', padding:'2px', cursor:'zoom-in'}} 
+                        style={{width:'100%', height:'100%', objectFit:'contain', padding:'2px', cursor:'zoom-in', display: imageError ? 'none' : 'block'}} 
                         onClick={() => setViewerImage(products.find(p => p.id === editingId)?.image_url || null)}
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
-                          e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                          setImageError(true);
+                        }}
+                        onLoad={(e) => {
+                          e.currentTarget.style.display = 'block';
+                          setImageError(false);
                         }}
                       />
-                      <div className="hidden w-full h-full flex items-center justify-center">
-                        <ImageIcon className="text-gray-200" size={20} />
-                      </div>
+                      {imageError && (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <ImageIcon className="text-gray-200" size={20} />
+                        </div>
+                      )}
                     </>
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Archivo en Storage</p>
-                    <code className="text-xs font-mono text-primary bg-primary/5 px-2 py-1 rounded">productos/{editingId}.webp</code>
+                    {!imageError ? (
+                      <>
+                        <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Archivo en Storage</p>
+                        <code className="text-xs font-mono text-primary bg-primary/5 px-2 py-1 rounded">productos/{editingId}.webp</code>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Estado de Imagen</p>
+                        <span className="text-xs font-medium text-gray-400">Sin archivo asociado</span>
+                      </>
+                    )}
                   </div>
                 </div>
                 <p className="text-[11px] text-gray-400 font-medium">Nota: Subir una imagen reemplazará automáticamente la actual.</p>
