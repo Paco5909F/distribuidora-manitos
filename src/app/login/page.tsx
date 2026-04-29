@@ -76,7 +76,7 @@ export default function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 font-bold transition-all text-sm text-foreground placeholder:font-medium placeholder:text-gray-300"
+              className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 font-bold transition-all text-base text-foreground placeholder:font-medium placeholder:text-gray-300"
               placeholder="Correo electrónico o teléfono"
             />
           </div>
@@ -89,7 +89,7 @@ export default function LoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 font-black tracking-widest transition-all text-sm text-foreground placeholder:font-medium placeholder:tracking-normal placeholder:text-gray-300"
+              className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 font-black tracking-widest transition-all text-base text-foreground placeholder:font-medium placeholder:tracking-normal placeholder:text-gray-300"
               placeholder="Ingrese su contraseña"
             />
           </div>

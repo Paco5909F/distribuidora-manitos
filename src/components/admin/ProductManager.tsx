@@ -258,47 +258,6 @@ export default function ProductManager() {
     setLoading(false);
   };
 
-  const cleanOrphanImages = async () => {
-    if (!confirm("Esto escaneará tu bucket 'imagenes/productos/' y borrará TODAS las fotos que no correspondan a un ID de producto activo en tu Base de Datos. ¿Continuar?")) return;
-    setLoading(true);
-    setMsg("Obteniendo inventario...");
-    
-    try {
-      // 1. Obtener todos los IDs
-      const { data: allProducts, error: dbErr } = await supabase.from("productos").select("id");
-      if (dbErr) throw dbErr;
-      const validIds = new Set(allProducts?.map(p => p.id) || []);
-      
-      // 2. Obtener lista de archivos en el bucket
-      setMsg("Analizando archivos en el Storage...");
-      const { data: files, error: storageErr } = await supabase.storage.from("imagenes").list("productos", { limit: 5000 });
-      if (storageErr) throw storageErr;
-      if (!files) { setLoading(false); return; }
-
-      // 3. Filtrar huérfanos (los que no están en validIds y no son carpetas placeholder)
-      const orphans = files.filter(f => {
-         if (f.name === '.emptyFolderPlaceholder' || f.name === '') return false;
-         const match = f.name.match(/^(\d+)\.(webp|jpg|png|jpeg)$/);
-         if (!match) return false; // si no sigue la nomenclatura id.extensión, lo ignoramos para no borrar basura que no conocemos
-         const id = parseInt(match[1]);
-         return !validIds.has(id);
-      }).map(f => `productos/${f.name}`);
-
-      // 4. Eliminar huérfanos
-      if (orphans.length > 0) {
-         setMsg(`Eliminando ${orphans.length} imágenes basura...`);
-         const { error: rmErr } = await supabase.storage.from("imagenes").remove(orphans);
-         if (rmErr) throw rmErr;
-         setMsg(`Limpieza exitosa: ${orphans.length} imágenes huérfanas eliminadas.`);
-      } else {
-         setMsg("Inventario perfecto. No se encontraron imágenes huérfanas.");
-      }
-    } catch (err: any) {
-      setMsg("Error en la limpieza: " + err.message);
-    }
-    setLoading(false);
-  };
-
   return (
     <div className="bg-white rounded-3xl shadow-sm border border-gray-100 mt-8 overflow-hidden flex flex-col lg:flex-row">
       
@@ -310,13 +269,6 @@ export default function ProductManager() {
                <h2 className="text-xl font-heading font-black text-foreground">Catálogo Completo</h2>
                <span className="bg-primary/10 text-primary text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">{products.length} Items</span>
              </div>
-             <button 
-               onClick={cleanOrphanImages} 
-               className="text-xs font-bold text-gray-500 hover:text-red-600 bg-gray-100 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2"
-               title="Buscar y eliminar imágenes sin producto en la Base de Datos"
-             >
-               🧹 Limpiar Storage
-             </button>
           </div>
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />

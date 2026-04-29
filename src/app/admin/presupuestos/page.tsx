@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { Product } from "@/services/products";
+import { Product, applySmartSearch } from "@/services/products";
 import { Search, Plus, Trash2, FileDown } from "lucide-react";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import dynamic from "next/dynamic";
@@ -47,9 +47,29 @@ export default function PresupuestosPage() {
 
     const timeoutId = setTimeout(async () => {
       setLoadingSearch(true);
-      const res = await supabase.rpc('buscar_producto', { query: search });
-      if (!res.error && res.data) {
-        setSearchResults(res.data);
+      
+      let query = supabase.from("productos")
+        .select(`
+          id,
+          nombre,
+          precio,
+          categoria:categorias(nombre),
+          activo
+        `)
+        .eq("activo", true);
+        
+      query = applySmartSearch(query, search);
+      const { data, error } = await query.limit(50);
+      
+      if (!error && data) {
+        const formatted = data.map((p: any) => ({
+          id: p.id,
+          nombre: p.nombre,
+          precio: p.precio,
+          categoria: p.categoria?.nombre || 'General',
+          activo: p.activo
+        }));
+        setSearchResults(formatted);
       }
       setLoadingSearch(false);
     }, 400);

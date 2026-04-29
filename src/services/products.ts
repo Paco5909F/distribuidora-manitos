@@ -36,7 +36,7 @@ const synonyms: Record<string, string[]> = {
   pelotas: ["pelota"],
 };
 
-const applySmartSearch = (baseQuery: any, searchInput: string) => {
+export const applySmartSearch = (baseQuery: any, searchInput: string) => {
   const normalized = normalize(searchInput);
   const words = normalized.split(/\s+/).filter(w => w.length > 0);
   let query = baseQuery;

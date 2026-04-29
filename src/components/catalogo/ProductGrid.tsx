@@ -66,6 +66,7 @@ export default function ProductGrid() {
 
   const handleCategoryChange = (cat: string) => {
     setSelectedCategory(cat);
+    setSearchQuery(""); // Limpiar búsqueda al cambiar categoría
     setPage(1); // reset to page 1 on category change
   };
 
