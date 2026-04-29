@@ -48,12 +48,12 @@ export default function PresupuestosPage() {
     const timeoutId = setTimeout(async () => {
       setLoadingSearch(true);
       
-      let query = supabase.from("productos")
+      let query = supabase.from("v_productos")
         .select(`
           id,
           nombre,
           precio,
-          categoria:categorias(nombre),
+          categoria,
           activo
         `)
         .eq("activo", true);
@@ -66,7 +66,7 @@ export default function PresupuestosPage() {
           id: p.id,
           nombre: p.nombre,
           precio: p.precio,
-          categoria: p.categoria?.nombre || 'General',
+          categoria: p.categoria || 'General',
           activo: p.activo
         }));
         setSearchResults(formatted);
