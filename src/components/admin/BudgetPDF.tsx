@@ -146,10 +146,11 @@ const styles = StyleSheet.create({
   },
 
   // Columns constraints
-  colConcept: { width: '40%', textAlign: 'left', paddingLeft: 8 },
+  colConcept: { width: '35%', textAlign: 'left', paddingLeft: 8 },
+  colCategoria: { width: '20%', textAlign: 'left', paddingLeft: 8 },
   colQty: { width: '15%' },
-  colUnit: { width: '25%' },
-  colSub: { width: '20%', borderRightWidth: 0, fontWeight: 'bold' },
+  colUnit: { width: '15%' },
+  colSub: { width: '15%', borderRightWidth: 0, fontWeight: 'bold' },
 
   // Total Box
   totalWrapper: {
@@ -295,8 +296,9 @@ export const BudgetDocument = ({ data }: { data: BudgetData }) => {
           {/* Header Row */}
           <View style={styles.tableHeaderGroup}>
             <Text style={[styles.th, styles.colConcept]}>CONCEPTO</Text>
-            <Text style={[styles.th, styles.colQty]}>CANTIDAD</Text>
-            <Text style={[styles.th, styles.colUnit]}>PRECIO UNIT.</Text>
+            <Text style={[styles.th, styles.colCategoria]}>CATEGORÍA</Text>
+            <Text style={[styles.th, styles.colQty]}>CANT</Text>
+            <Text style={[styles.th, styles.colUnit]}>PRECIO U.</Text>
             <Text style={[styles.th, styles.colSub]}>SUBTOTAL</Text>
           </View>
 
@@ -304,8 +306,9 @@ export const BudgetDocument = ({ data }: { data: BudgetData }) => {
           {data.items.map((item, index) => (
             <View style={styles.tr} key={index}>
               <Text style={[styles.td, styles.colConcept, { fontWeight: 'bold' }]}>
-                {item.categoria ? `"${item.categoria}" "${item.nombre}"` : item.nombre}
+                {item.nombre}
               </Text>
+              <Text style={[styles.td, styles.colCategoria]}>{item.categoria || '-'}</Text>
               <Text style={[styles.td, styles.colQty]}>{item.cantidad}</Text>
               <Text style={[styles.td, styles.colUnit]}>$ {item.precio.toLocaleString('es-AR')}</Text>
               <Text style={[styles.td, styles.colSub]}>$ {(item.precio * item.cantidad).toLocaleString('es-AR')}</Text>
