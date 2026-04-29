@@ -1,20 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getCategories } from "@/services/products";
-import { Search, Plus, Edit2, Trash2, Image as ImageIcon } from "lucide-react";
+import { Search, Plus, Edit2, Trash2, Image as ImageIcon, AlertCircle, RefreshCw } from "lucide-react";
 import Image from "next/image";
 import { createClient } from "@/utils/supabase/client";
-
-interface DbProduct {
-  id: number;
-  nombre: string;
-  precio: number;
-  categoria_id: number;
-  activo: boolean;
-  image_url?: string;
-  image_url_fallback?: string;
-}
+import { useAdminProducts } from "@/hooks/useAdminProducts";
+import { useAdminCategories } from "@/hooks/useAdminCategories";
+import { Product as DbProduct } from "@/services/products";
 
 const processImageLocally = (file: File): Promise<Blob> => {
   return new Promise((resolve, reject) => {
@@ -60,10 +52,12 @@ const processImageLocally = (file: File): Promise<Blob> => {
 
 export default function ProductManager() {
   const supabase = createClient();
-  const [categories, setCategories] = useState<any[]>([]);
-  const [products, setProducts] = useState<DbProduct[]>([]);
+  
+  // Custom Hooks para abstracción y manejo de estados (Loading, Error, Empty, Success)
+  const { categories, state: catState, errorMessage: catError, fetchCategories } = useAdminCategories();
+  const { products, state: prodState, errorMessage: prodError, fetchProducts } = useAdminProducts();
+  
   const [search, setSearch] = useState("");
-  const [cacheBuster, setCacheBuster] = useState(() => Date.now());
   
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
@@ -80,56 +74,12 @@ export default function ProductManager() {
   const [msg, setMsg] = useState("");
 
   useEffect(() => {
-    getCategories().then(setCategories);
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async (q: string = "", customBuster?: number) => {
-    const busterToUse = customBuster || cacheBuster;
-    let query = supabase.from("productos").select("*").eq("activo", true).order("nombre");
-    if (q) query = query.ilike("nombre", `%${q}%`);
-    // Burlamos el límite de 1000 (max_rows) de Supabase iterando de a bloques
-    let allData: any[] = [];
-    let from = 0;
-    const step = 1000;
-    let keepFetching = true;
-
-    while (keepFetching) {
-      const { data } = await query.range(from, from + step - 1);
-      
-      if (data && data.length > 0) {
-        allData = [...allData, ...data];
-        if (data.length < step) {
-          keepFetching = false;
-        } else {
-          from += step;
-        }
-      } else {
-        keepFetching = false;
-      }
-    }
-    
-    const data = allData;
-    
-    if (data) {
-      const mapped = data.map(p => {
-        return {
-          ...p,
-          image_url: supabase.storage.from("imagenes").getPublicUrl(`productos/${p.id}.webp`).data.publicUrl + `?v=${busterToUse}`,
-          image_url_fallback: supabase.storage.from("imagenes").getPublicUrl(`productos/${p.id}.jpg`).data.publicUrl + `?v=${busterToUse}`
-        };
-      });
-      setProducts(mapped);
-    }
-  };
-
-  useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       fetchProducts(search);
       setCurrentPage(1);
     }, 400);
     return () => clearTimeout(delayDebounceFn);
-  }, [search]);
+  }, [search, fetchProducts]);
 
   const resetForm = () => {
     setEditingId(null);
@@ -144,7 +94,7 @@ export default function ProductManager() {
     setEditingId(prod.id);
     setNombre(prod.nombre);
     setPrecio(prod.precio?.toString() || "");
-    setCategoriaId(prod.categoria_id.toString());
+    setCategoriaId(prod.categoria_id?.toString() || "");
     setFile(null);
     setMsg("");
   };
@@ -214,7 +164,6 @@ export default function ProductManager() {
     }
 
     const nb = Date.now();
-    setCacheBuster(nb);
     setMsg(editingId ? "Producto actualizado exitosamente." : "Producto agregado exitosamente.");
     fetchProducts(search, nb);
     if (!editingId) resetForm();
@@ -230,7 +179,6 @@ export default function ProductManager() {
     await supabase.storage.from("imagenes").remove([`productos/${editingId}.jpg`, `productos/${editingId}.webp`]);
     
     const nb = Date.now();
-    setCacheBuster(nb);
     setMsg("Imagen removida con éxito.");
     fetchProducts(search, nb);
     setLoading(false);
@@ -284,9 +232,33 @@ export default function ProductManager() {
 
         <div className="flex flex-col flex-grow border border-gray-100 rounded-xl bg-gray-50/50 overflow-hidden shadow-sm">
           <div className="flex-grow overflow-y-auto max-h-[500px] p-2">
-            {products.length === 0 ? (
-              <div className="text-center p-8 text-gray-400 font-medium text-sm">No se encontraron productos.</div>
-            ) : (
+            {prodState === 'loading' && (
+               <div className="flex flex-col items-center justify-center p-12 text-gray-400">
+                  <div className="w-8 h-8 rounded-full border-4 border-gray-200 border-t-primary animate-spin mb-4" />
+                  <p className="text-sm font-bold uppercase tracking-widest">Cargando inventario...</p>
+               </div>
+            )}
+            
+            {prodState === 'error' && (
+               <div className="flex flex-col items-center justify-center p-12 text-red-500 bg-red-50 rounded-xl m-2 border border-red-100">
+                  <AlertCircle size={32} className="mb-3" />
+                  <p className="text-sm font-bold uppercase tracking-widest mb-4">{prodError}</p>
+                  <button onClick={() => fetchProducts(search)} className="flex items-center gap-2 bg-white text-red-600 px-4 py-2 rounded-lg font-bold border border-red-200 hover:bg-red-600 hover:text-white transition-colors">
+                     <RefreshCw size={16} /> Reintentar
+                  </button>
+               </div>
+            )}
+
+            {prodState === 'empty' && (
+               <div className="text-center p-12 text-gray-400">
+                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                   <Search size={24} className="text-gray-400" />
+                 </div>
+                 <p className="text-sm font-bold uppercase tracking-widest">No se encontraron productos</p>
+               </div>
+            )}
+
+            {prodState === 'success' && (
                <div className="flex flex-col gap-2">
                   {paginatedProducts.map(prod => (
                     <div key={prod.id} className={`flex items-center justify-between p-3 rounded-lg border transition-all ${editingId === prod.id ? 'bg-primary/5 border-primary/20' : 'bg-white border-transparent hover:border-gray-200 shadow-sm'}`}>
@@ -324,7 +296,7 @@ export default function ProductManager() {
                       </div>
                     </div>
                   ))}
-               </div>
+                </div>
             )}
           </div>
           

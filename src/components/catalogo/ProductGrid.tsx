@@ -44,15 +44,23 @@ export default function ProductGrid() {
     });
   }, []);
 
+  const [errorMsg, setErrorMsg] = useState("");
+
   // Load Products
   const loadProducts = useCallback(async () => {
     setLoading(true);
-    const { data, count } = await getProducts({
+    setErrorMsg("");
+    const { data, count, error } = await getProducts({
       page,
       limit: ITEMS_PER_PAGE,
       category: selectedCategory,
       search: debouncedSearch,
     });
+    
+    if (error) {
+      setErrorMsg("Ocurrió un problema al cargar los productos. Por favor, reintenta en unos instantes.");
+    }
+    
     setProducts(data);
     setTotalProducts(count);
     setLoading(false);
@@ -138,7 +146,18 @@ export default function ProductGrid() {
         </div>
 
         {/* Grid */}
-        {loading ? (
+        {errorMsg ? (
+          <div className="w-full bg-red-50 text-red-600 p-8 rounded-3xl border border-red-100 flex flex-col items-center justify-center min-h-[300px]">
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+               <span className="text-2xl">⚠️</span>
+            </div>
+            <h3 className="font-heading font-black text-xl mb-2 text-center">Algo salió mal</h3>
+            <p className="text-sm font-medium text-center max-w-md opacity-80 mb-6">{errorMsg}</p>
+            <button onClick={() => loadProducts()} className="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-2 rounded-xl transition-colors">
+              Reintentar
+            </button>
+          </div>
+        ) : loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {Array.from({ length: 12 }).map((_, i) => (
               <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full opacity-60">

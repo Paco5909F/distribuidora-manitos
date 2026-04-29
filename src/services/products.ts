@@ -5,9 +5,11 @@ export interface Product {
   nombre: string;
   precio: number;
   categoria?: string;
+  categoria_id?: number;
   activo: boolean;
   updated_at?: string;
   image_url?: string;
+  image_url_fallback?: string;
 }
 
 export interface FetchProductsOptions {
@@ -84,7 +86,7 @@ export async function getProducts({ page, limit, category, search }: FetchProduc
   
   if (res.error) {
     console.error('Error fetching products:', res.error);
-    return { data: [] as Product[], count: 0 };
+    return { data: [] as Product[], count: 0, error: res.error.message };
   }
 
   let data = res.data || [];
