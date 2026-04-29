@@ -211,6 +211,7 @@ const styles = StyleSheet.create({
 export interface BudgetItem {
   producto_id: number;
   nombre: string;
+  categoria?: string;
   precio: number;
   cantidad: number;
 }
@@ -302,7 +303,9 @@ export const BudgetDocument = ({ data }: { data: BudgetData }) => {
           {/* Rows */}
           {data.items.map((item, index) => (
             <View style={styles.tr} key={index}>
-              <Text style={[styles.td, styles.colConcept, { fontWeight: 'bold' }]}>{item.nombre}</Text>
+              <Text style={[styles.td, styles.colConcept, { fontWeight: 'bold' }]}>
+                {item.categoria ? `"${item.categoria}" "${item.nombre}"` : item.nombre}
+              </Text>
               <Text style={[styles.td, styles.colQty]}>{item.cantidad}</Text>
               <Text style={[styles.td, styles.colUnit]}>$ {item.precio.toLocaleString('es-AR')}</Text>
               <Text style={[styles.td, styles.colSub]}>$ {(item.precio * item.cantidad).toLocaleString('es-AR')}</Text>

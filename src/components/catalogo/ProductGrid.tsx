@@ -79,7 +79,7 @@ export default function ProductGrid() {
   };
 
   const createWhatsAppLink = (product: Product) => {
-    const message = `Hola Distribuidora Manitos, me interesa consultar el precio y disponibilidad de: *${product.nombre}*`;
+    const message = `Hola, estuve viendo su catálogo online y me interesa conocer más sobre: *${product.nombre}*.\n\n¿Podrían brindarme información sobre precio y disponibilidad?`;
     return `https://wa.me/5492352407359?text=${encodeURIComponent(message)}`;
   };
 

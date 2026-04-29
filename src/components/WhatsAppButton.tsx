@@ -6,7 +6,7 @@ import { WhatsAppIcon } from "./WhatsAppIcon";
 export default function WhatsAppButton() {
   return (
     <motion.a
-      href="https://wa.me/5492352407359?text=Hola%20Distribuidora%20Manitos!%20Vengo%20desde%20la%20web"
+      href="https://wa.me/5492352407359?text=Hola%2C%20quisiera%20realizar%20una%20consulta%20sobre%20sus%20productos.%20%C2%BFPodr%C3%ADan%20brindarme%20informaci%C3%B3n%3F"
       target="_blank"
       rel="noopener noreferrer"
       initial={{ scale: 0, opacity: 0 }}

@@ -43,7 +43,7 @@ export default function Home() {
             Ver Catálogo
           </Link>
           <a
-            href="https://wa.me/5492352407359?text=Hola%20Distribuidora%20Manitos!%20Vengo%20desde%20la%20web"
+            href="https://wa.me/5492352407359?text=Hola%2C%20quisiera%20realizar%20una%20consulta%20sobre%20sus%20productos.%20%C2%BFPodr%C3%ADan%20brindarme%20informaci%C3%B3n%3F"
             target="_blank"
             rel="noopener noreferrer"
             className="group px-8 py-4 bg-white border border-border text-foreground text-sm tracking-widest uppercase font-bold rounded-full shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3"

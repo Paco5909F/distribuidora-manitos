@@ -84,7 +84,7 @@ export default function PresupuestosPage() {
       if (exists) {
         return prev.map(i => i.producto_id === prod.id ? { ...i, cantidad: i.cantidad + 1, precio: precioBase } : i);
       }
-      return [...prev, { producto_id: prod.id, nombre: prod.nombre, precio: precioBase, cantidad: 1 }];
+      return [...prev, { producto_id: prod.id, nombre: prod.nombre, categoria: prod.categoria, precio: precioBase, cantidad: 1 }];
     });
     setSearch("");
     setSearchResults([]);
@@ -150,7 +150,18 @@ export default function PresupuestosPage() {
     return `Presupuesto-${clientSanitized}-${dd}${mm}.pdf`;
   }, [cliente]);
 
-  const wppText = encodeURIComponent(`Hola ${cliente ? cliente : ''}, aquí le envío el resumen de su presupuesto calculado por $${totalFinal.toLocaleString('es-AR')}.`);
+  const wppText = useMemo(() => {
+    const productosTexto = items.map(i => `- ${i.nombre} x${i.cantidad}`).join('\n');
+    return encodeURIComponent(
+      `Hola, le comparto el presupuesto solicitado.\n\n` +
+      `Cliente: ${cliente || 'Consumidor Final'}\n\n` +
+      `${items.length ? `Productos:\n${productosTexto}\n\n` : ''}` +
+      `Total: $${totalFinal.toLocaleString('es-AR')}\n\n` +
+      `Este mensaje incluye el detalle completo en PDF.\n\n` +
+      `Ante cualquier consulta o modificación, quedo a disposición.`
+    );
+  }, [cliente, items, totalFinal]);
+  
   const wppLink = `https://wa.me/?text=${wppText}`;
 
   return (
@@ -251,9 +262,13 @@ export default function PresupuestosPage() {
                     <div className="flex items-center gap-1 w-20">
                       <input
                         type="number"
-                        value={ajustePorcentaje}
-                        onChange={e => setAjustePorcentaje(parseFloat(e.target.value) || 0)}
-                        className="w-full border-b border-primary py-2 outline-none text-right font-black text-xs bg-transparent"
+                        value={ajustePorcentaje === 0 ? "" : ajustePorcentaje}
+                        onChange={e => {
+                          const val = e.target.value;
+                          setAjustePorcentaje(val === "" ? 0 : parseFloat(val));
+                        }}
+                        placeholder="0"
+                        className="w-full border-b border-primary py-2 outline-none text-right font-black text-xs bg-transparent placeholder-gray-300"
                       />
                       <span className="text-xs font-bold text-gray-400">%</span>
                     </div>
