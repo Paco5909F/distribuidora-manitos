@@ -273,7 +273,9 @@ export default function ProductManager() {
                           {prod.image_url ? (
                             <img 
                               src={prod.image_url} 
-                              alt={prod.nombre} 
+                              alt={prod.nombre}
+                              loading="lazy"
+                              decoding="async" 
                               style={{width:'100%', height:'100%', objectFit:'contain', padding:'2px', cursor:'zoom-in'}} 
                               onClick={(e) => {
                                 e.stopPropagation();

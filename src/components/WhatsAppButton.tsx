@@ -2,11 +2,12 @@
 
 import { motion } from "framer-motion";
 import { WhatsAppIcon } from "./WhatsAppIcon";
+import { getWhatsAppLink } from "@/config/constants";
 
 export default function WhatsAppButton() {
   return (
     <motion.a
-      href="https://wa.me/5492352407359?text=Hola%2C%20quisiera%20realizar%20una%20consulta%20sobre%20sus%20productos.%20%C2%BFPodr%C3%ADan%20brindarme%20informaci%C3%B3n%3F"
+      href={getWhatsAppLink()}
       target="_blank"
       rel="noopener noreferrer"
       initial={{ scale: 0, opacity: 0 }}

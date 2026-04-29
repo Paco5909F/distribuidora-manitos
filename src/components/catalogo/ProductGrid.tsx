@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { getProducts, getCategories, Product } from "@/services/products";
+import { getWhatsAppLink } from "@/config/constants";
 import ProductCard from "./ProductCard";
 import { Search, ChevronLeft, ChevronRight, X, MessageCircle } from "lucide-react";
 import Image from "next/image";
@@ -80,7 +81,7 @@ export default function ProductGrid() {
 
   const createWhatsAppLink = (product: Product) => {
     const message = `Hola, estuve viendo su catálogo online y me interesa conocer más sobre: *${product.nombre}*.\n\n¿Podrían brindarme información sobre precio y disponibilidad?`;
-    return `https://wa.me/5492352407359?text=${encodeURIComponent(message)}`;
+    return getWhatsAppLink(message);
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {

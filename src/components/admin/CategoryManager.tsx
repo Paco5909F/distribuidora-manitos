@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Plus, Edit2, Trash2, Search } from "lucide-react";
 
@@ -21,17 +21,18 @@ export default function CategoryManager() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [nombre, setNombre] = useState("");
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     const { data } = await supabase
       .from("categorias")
       .select("*")
       .order("nombre");
     if (data) setCategories(data);
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   const resetForm = () => {
     setEditingId(null);

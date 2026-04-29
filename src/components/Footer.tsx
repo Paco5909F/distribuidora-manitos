@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getWhatsAppLink } from "@/config/constants";
 import Image from "next/image";
 import { Mail } from "lucide-react";
 import { WhatsAppIcon } from "./WhatsAppIcon";
@@ -46,7 +47,7 @@ export default function Footer() {
 
         <div className="flex items-center gap-4">
           <a
-            href="https://wa.me/5492352407359?text=Hola%2C%20quisiera%20realizar%20una%20consulta%20sobre%20sus%20productos.%20%C2%BFPodr%C3%ADan%20brindarme%20informaci%C3%B3n%3F"
+            href={getWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp"

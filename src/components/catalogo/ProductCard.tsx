@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Product } from "@/services/products";
 
 interface ProductCardProps {
@@ -25,12 +24,12 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
       {/* Container force background white and object-contain */}
       <div className="relative w-full aspect-square bg-white border-b border-gray-50 flex items-center justify-center p-4">
         {product.image_url ? (
-          <Image
+          <img
             src={product.image_url}
             alt={product.nombre}
-            fill
-            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-            className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
               e.currentTarget.nextElementSibling?.classList.remove('hidden');

@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-heading' });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://distribuidoramanitos.com"),
   title: "Distribuidora Manitos | Todo para Mascotas y Jardinería",
   description: "En Distribuidora Manitos vas a encontrar el mejor catálogo mayorista y minorista de productos para mascotas (perros, gatos, roedores) y artículos de jardinería.",
   keywords: ["Distribuidora Manitos", "alimento para perros", "alimento para gatos", "mascotas", "jardinería", "mayorista mascotas", "accesorios mascotas"],
