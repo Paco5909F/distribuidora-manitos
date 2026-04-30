@@ -293,8 +293,11 @@ export default function ProductManager() {
                         </div>
                           <div>
                             <h3 className="text-sm font-bold text-foreground leading-tight">{prod.nombre}</h3>
-                            <div className="flex gap-3 mt-1">
+                            <div className="flex gap-3 mt-1 items-center">
                               <p className="text-[10px] font-black text-primary uppercase">Precio: ${prod.precio?.toLocaleString('es-AR')}</p>
+                              {prod.categoria && (
+                                <p className="text-[10px] font-bold text-gray-400 uppercase">• {prod.categoria}</p>
+                              )}
                             </div>
                           </div>
                       </div>
