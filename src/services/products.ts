@@ -38,6 +38,7 @@ const synonyms: Record<string, string[]> = {
   pelotas: ["pelota"],
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const applySmartSearch = (baseQuery: any, searchInput: string) => {
   const normalized = normalize(searchInput);
   const words = normalized.split(/\s+/).filter(w => w.length > 0);
@@ -89,8 +90,8 @@ export async function getProducts({ page, limit, category, search }: FetchProduc
     return { data: [] as Product[], count: 0, error: res.error.message };
   }
 
-  let data = res.data || [];
-  let count = res.count || 0;
+  const data = res.data || [];
+  const count = res.count || 0;
 
   // Mapear image_url dinámicamente ya que no está en la base de datos (según script.sql)
   const mappedData = data?.map(p => ({

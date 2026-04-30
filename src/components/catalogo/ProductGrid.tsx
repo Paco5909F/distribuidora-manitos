@@ -3,15 +3,19 @@
 import { useState, useEffect, useCallback } from "react";
 import { getProducts, getCategories, Product } from "@/services/products";
 import { getWhatsAppLink } from "@/config/constants";
+
+interface Category {
+  id: number;
+  nombre: string;
+}
 import ProductCard from "./ProductCard";
 import { Search, ChevronLeft, ChevronRight, X, MessageCircle } from "lucide-react";
-import Image from "next/image";
 
 const ITEMS_PER_PAGE = 24;
 
 export default function ProductGrid() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [totalProducts, setTotalProducts] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -227,12 +231,13 @@ export default function ProductGrid() {
             {/* Image Container */}
             <div className="w-full md:w-1/2 aspect-square md:min-h-[400px] bg-white relative border-b md:border-b-0 md:border-r border-gray-100 flex items-center justify-center p-4 md:p-8 shrink-0">
               {selectedProduct.image_url ? (
-                <Image
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
                   src={selectedProduct.image_url}
                   alt={selectedProduct.nombre}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-contain p-6"
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-contain p-6"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.nextElementSibling?.classList.remove('hidden');

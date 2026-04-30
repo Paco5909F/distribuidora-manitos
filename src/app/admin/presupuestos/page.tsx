@@ -62,7 +62,7 @@ export default function PresupuestosPage() {
       const { data, error } = await query.limit(50);
       
       if (!error && data) {
-        const formatted = data.map((p: any) => ({
+        const formatted = (data as Product[]).map((p) => ({
           id: p.id,
           nombre: p.nombre,
           precio: p.precio,
@@ -123,7 +123,7 @@ export default function PresupuestosPage() {
         fechaFormatted: d.toLocaleDateString('es-AR'),
         validezFormatted: v.toLocaleDateString('es-AR')
       };
-    } catch (e) {
+    } catch {
       return { fechaFormatted: '', validezFormatted: '' };
     }
   }, [fechaElegida]);
@@ -251,7 +251,7 @@ export default function PresupuestosPage() {
                 <div className="flex gap-2">
                   <select
                     value={ajusteTipo}
-                    onChange={e => setAjusteTipo(e.target.value as any)}
+                    onChange={e => setAjusteTipo(e.target.value as "ninguno" | "descuento" | "recargo")}
                     className="flex-1 border-b border-gray-300 py-2 outline-none focus:border-primary focus:border-b-2 font-medium text-foreground bg-transparent transition-all text-sm cursor-pointer"
                   >
                     <option value="ninguno">Sin ajuste</option>

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { Search, Plus, Edit2, Trash2, Image as ImageIcon, AlertCircle, RefreshCw, X } from "lucide-react";
-import Image from "next/image";
 import { createClient } from "@/utils/supabase/client";
 import { useAdminProducts } from "@/hooks/useAdminProducts";
 import { useAdminCategories } from "@/hooks/useAdminCategories";
@@ -54,7 +53,7 @@ export default function ProductManager() {
   const supabase = createClient();
   
   // Custom Hooks para abstracción y manejo de estados (Loading, Error, Empty, Success)
-  const { categories, state: catState, errorMessage: catError, fetchCategories } = useAdminCategories();
+  const { categories } = useAdminCategories();
   const { products, state: prodState, errorMessage: prodError, fetchProducts } = useAdminProducts();
   
   const [search, setSearch] = useState("");
@@ -271,6 +270,7 @@ export default function ProductManager() {
                       <div className="flex items-center gap-4 cursor-pointer flex-grow" onClick={() => selectForEdit(prod)}>
                         <div className="w-12 h-12 bg-white rounded-md border border-gray-100 flex items-center justify-center relative overflow-hidden shrink-0">
                           {prod.image_url ? (
+                            /* eslint-disable-next-line @next/next/no-img-element */
                             <img 
                               src={prod.image_url} 
                               alt={prod.nombre}
@@ -416,6 +416,7 @@ export default function ProductManager() {
                 <div className="flex items-center gap-3">
                   <div className="w-16 h-16 bg-gray-50 rounded-lg border border-gray-100 flex items-center justify-center relative overflow-hidden shrink-0">
                     <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img 
                         src={products.find(p => p.id === editingId)?.image_url} 
                         alt="Preview" 
@@ -487,6 +488,7 @@ export default function ProductManager() {
             <X size={24} />
           </button>
           <div className="relative w-full max-w-4xl h-[80dvh] flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
               src={viewerImage} 
               alt="Visor" 

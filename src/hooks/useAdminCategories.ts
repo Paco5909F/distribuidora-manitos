@@ -38,7 +38,7 @@ export function useAdminCategories(): UseAdminCategoriesResult {
       setCategories(data);
       setState('success');
       
-    } catch (err: any) {
+    } catch (err) {
       console.error("Error fetching categories:", err);
       setErrorMessage("No se pudieron cargar las categorías.");
       setState('error');

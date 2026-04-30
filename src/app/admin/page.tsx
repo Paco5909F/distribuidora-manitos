@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { Package, FileText, ArrowRight, TrendingUp, Users, Box } from 'lucide-react';
+import { Package, FileText, ArrowRight, TrendingUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 

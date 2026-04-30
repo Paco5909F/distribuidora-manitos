@@ -40,7 +40,7 @@ export function useAdminProducts(): UseAdminProductsResult {
       }
       
       // Burlamos el límite de 1000 (max_rows) de Supabase iterando de a bloques
-      let allData: any[] = [];
+      let allData: Product[] = [];
       let from = 0;
       const step = 1000;
       let keepFetching = true;
@@ -51,7 +51,7 @@ export function useAdminProducts(): UseAdminProductsResult {
         if (error) throw error;
 
         if (data && data.length > 0) {
-          allData = [...allData, ...data];
+          allData = [...allData, ...(data as unknown as Product[])];
           if (data.length < step) {
             keepFetching = false;
           } else {
@@ -69,17 +69,19 @@ export function useAdminProducts(): UseAdminProductsResult {
         return;
       }
       
-      const formatted = allData.map(p => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const formatted = (allData as unknown as any[]).map(p => ({
         ...p,
+        categoria: Array.isArray(p.categoria) ? p.categoria[0]?.nombre : p.categoria,
         image_url: supabase.storage.from("imagenes").getPublicUrl(`productos/${p.id}.webp`).data.publicUrl + `?v=${busterToUse}`,
         image_url_fallback: supabase.storage.from("imagenes").getPublicUrl(`productos/${p.id}.jpg`).data.publicUrl + `?v=${busterToUse}`
-      }));
+      })) as Product[];
       
       setProducts(formatted);
       setTotalCount(formatted.length);
       setState('success');
       
-    } catch (err: any) {
+    } catch (err) {
       console.error("Error fetching products:", err);
       setErrorMessage("No se pudieron cargar los productos. Por favor, reintente más tarde.");
       setState('error');

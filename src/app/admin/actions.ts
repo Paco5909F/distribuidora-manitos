@@ -26,8 +26,9 @@ export async function bulkUpdatePrices(categoria_nombre: string, formType: strin
     revalidatePath("/admin");
     return { success: true };
 
-  } catch (err: any) {
-    console.error("Bulk update error:", err);
-    return { success: false, error: err.message || "Error desconocido" };
+  } catch (err) {
+    const error = err as Error;
+    console.error("Bulk update error:", error);
+    return { success: false, error: error.message || "Error desconocido" };
   }
 }

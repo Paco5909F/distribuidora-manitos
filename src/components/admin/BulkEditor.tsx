@@ -4,8 +4,13 @@ import { useState, useEffect } from "react";
 import { getCategories } from "@/services/products";
 import { bulkUpdatePrices } from "@/app/admin/actions";
 
+interface Category {
+  id: number;
+  nombre: string;
+}
+
 export default function BulkEditor() {
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCat, setSelectedCat] = useState("");
   const [editType, setEditType] = useState("percentage");
   const [val, setVal] = useState("");

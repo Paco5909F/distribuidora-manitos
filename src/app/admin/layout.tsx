@@ -1,13 +1,11 @@
 "use client";
 
 import { createClient } from "@/utils/supabase/client";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = createClient();
-  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleSignOut = async () => {
@@ -23,6 +21,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Mobile Header (Hidden on Desktop) */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-100 flex items-center justify-between px-5 shadow-sm z-[60]">
         <div className="flex items-center gap-3">
+           {/* eslint-disable-next-line @next/next/no-img-element */}
            <img src="/brand/logo.png" alt="Logo" className="h-8 w-8 object-contain" />
            <span className="font-heading font-black text-foreground">Panel Admin</span>
         </div>
@@ -55,6 +54,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Brand Header */}
         <div className="flex flex-col items-center mb-8 pb-8 border-b border-gray-100 mt-6 md:mt-0">
           <div className="relative w-32 h-32 md:w-36 md:h-36 mb-2">
+             {/* eslint-disable-next-line @next/next/no-img-element */}
              <img 
                src="/brand/logo.png" 
                alt="Manitos" 
