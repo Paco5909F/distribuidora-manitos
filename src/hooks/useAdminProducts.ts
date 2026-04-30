@@ -72,7 +72,7 @@ export function useAdminProducts(): UseAdminProductsResult {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const formatted = (allData as unknown as any[]).map(p => ({
         ...p,
-        categoria: Array.isArray(p.categoria) ? p.categoria[0]?.nombre : p.categoria,
+        categoria: Array.isArray(p.categoria) ? p.categoria[0]?.nombre : (p.categoria?.nombre || p.categoria),
         image_url: supabase.storage.from("imagenes").getPublicUrl(`productos/${p.id}.webp`).data.publicUrl + `?v=${busterToUse}`,
         image_url_fallback: supabase.storage.from("imagenes").getPublicUrl(`productos/${p.id}.jpg`).data.publicUrl + `?v=${busterToUse}`
       })) as Product[];
