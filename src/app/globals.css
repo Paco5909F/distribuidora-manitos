@@ -61,7 +61,7 @@
     @apply border-border;
   }
   body {
-    @apply text-foreground min-h-screen relative;
+    @apply text-foreground min-h-[100dvh] relative;
     background-color: #F8FAFC;
     background-image: 
       url("/pattern.svg"),

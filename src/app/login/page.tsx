@@ -34,7 +34,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] px-4 py-12 animate-in fade-in duration-500 relative overflow-hidden">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-[#F8FAFC] px-4 py-12 animate-in fade-in duration-500 relative overflow-hidden">
       {/* Pattern de Fondo */}
       <div className="absolute inset-0 opacity-100 bg-[url('/pattern.svg')] mix-blend-multiply pointer-events-none z-0"></div>
 

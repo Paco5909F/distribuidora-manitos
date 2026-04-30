@@ -14,7 +14,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   return (
-    <div className="min-h-screen flex bg-[#F8FAFC] font-sans relative">
+    <div className="min-h-[100dvh] flex bg-[#F8FAFC] font-sans relative">
       {/* Global Background Pattern */}
       <div className="fixed inset-0 z-0 bg-[url('/pattern.svg')] opacity-100 mix-blend-multiply pointer-events-none"></div>
       

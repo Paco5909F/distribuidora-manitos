@@ -338,7 +338,7 @@ export default function PresupuestosPage() {
       </div>
 
       <div className="w-full xl:w-7/12 flex flex-col gap-6">
-        <div className="bg-white p-4 sm:p-6 md:p-10 md:rounded-[2rem] shadow-sm border-t md:border border-gray-100 flex flex-col h-full pb-64 md:pb-6">
+        <div className="bg-white p-4 sm:p-6 md:p-10 md:rounded-[2rem] shadow-sm border-t md:border border-gray-100 flex flex-col h-full pb-6 md:pb-10">
 
           <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
             <h2 className="text-xl font-black font-heading">Lista de Ítems</h2>
@@ -399,7 +399,7 @@ export default function PresupuestosPage() {
                 </table>
               </div>
 
-              <div className="md:mt-auto pt-4 md:pt-8 flex flex-col gap-4 fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] px-4 pb-6 md:relative md:border-t-0 md:bg-transparent md:shadow-none md:p-0">
+              <div className="mt-auto pt-6 md:pt-8 flex flex-col gap-4 bg-white border-t border-gray-100 px-4 pb-[env(safe-area-inset-bottom,1.5rem)] md:pb-0 md:border-t-0 md:bg-transparent md:px-0">
                 <div className="flex flex-col gap-2 border-b border-gray-100 pb-4">
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Subtotal</span>
