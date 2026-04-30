@@ -151,7 +151,10 @@ export default function PresupuestosPage() {
   }, [cliente]);
 
   const wppText = useMemo(() => {
-    const productosTexto = items.map(i => `- ${i.nombre} x${i.cantidad}`).join('\n');
+    const productosTexto = items.map(i => {
+      const catTexto = i.categoria && i.categoria !== 'General' ? `${i.categoria} - ` : '';
+      return `- ${catTexto}${i.nombre} x${i.cantidad}`;
+    }).join('\n');
     return encodeURIComponent(
       `Hola, le comparto el presupuesto solicitado.\n\n` +
       `Cliente: ${cliente.trim()}\n\n` +
