@@ -4,6 +4,8 @@ import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
+import { AutoLogout } from "@/components/auth/auto-logout";
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = createClient();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -15,6 +17,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-[100dvh] flex bg-[#F8FAFC] font-sans relative">
+      <AutoLogout />
       {/* Global Background Pattern */}
       <div className="fixed inset-0 z-0 bg-[url('/pattern.svg')] opacity-100 mix-blend-multiply pointer-events-none"></div>
       
