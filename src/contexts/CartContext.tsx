@@ -106,13 +106,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     >
       {children}
       {toastMessage && (
-        <div className="fixed top-6 right-6 md:top-10 md:right-10 z-[200] bg-white border border-gray-100 text-gray-800 p-3 pr-5 rounded-2xl shadow-xl font-medium text-sm animate-in fade-in slide-in-from-right-8 flex items-center gap-3">
-          <div className="w-8 h-8 bg-[#25D366]/10 text-[#25D366] rounded-full flex items-center justify-center shrink-0">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          </div>
-          <div>
-            <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-0.5">Agregado al carrito</p>
-            <p className="text-sm font-bold text-gray-800 max-w-[200px] truncate">{toastMessage}</p>
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[200] bg-white border border-gray-100 px-6 py-3 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.08)] animate-in fade-in slide-in-from-top-4 flex items-center gap-4">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <div className="flex flex-col">
+            <span className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Agregado al carrito</span>
+            <span className="text-sm md:text-base font-black text-slate-800 uppercase leading-none max-w-[200px] md:max-w-[300px] truncate">{toastMessage}</span>
           </div>
         </div>
       )}
