@@ -1,0 +1,143 @@
+"use client";
+
+import { useState } from "react";
+import { useCart } from "@/contexts/CartContext";
+import { X, Minus, Plus, Trash2, MessageCircle } from "lucide-react";
+import { getWhatsAppLink } from "@/config/constants";
+
+export default function CartSidebar() {
+  const { cart, removeFromCart, updateQuantity, isCartOpen, setIsCartOpen, total } = useCart();
+  const [clientName, setClientName] = useState("");
+
+  if (!isCartOpen) return null;
+
+  const handleSendOrder = () => {
+    if (!clientName.trim()) {
+      alert("Por favor, ingresa tu nombre para enviar el pedido.");
+      return;
+    }
+
+    const productosTexto = cart
+      .map((i) => {
+        const catTexto = i.categoria && i.categoria !== "General" ? `${i.categoria} - ` : "";
+        const subtotal = i.precio * i.cantidad;
+        return `- ${catTexto}${i.nombre} x${i.cantidad} → $${subtotal.toLocaleString("es-AR")}`;
+      })
+      .join("\n");
+
+    const message = `Hola, le comparto el detalle del pedido:\n\nCliente: ${clientName.trim()}\n\nProductos:\n${productosTexto}\n\nTotal: $${total.toLocaleString("es-AR")}\n\n¿Podrían confirmarme disponibilidad y formas de pago?`;
+
+    window.open(getWhatsAppLink(message), "_blank");
+  };
+
+  return (
+    <>
+      <div 
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] animate-in fade-in"
+        onClick={() => setIsCartOpen(false)}
+      />
+      <div className="fixed top-0 right-0 h-[100dvh] w-full max-w-md bg-white shadow-2xl z-[110] flex flex-col animate-in slide-in-from-right duration-300">
+        
+        {/* Header */}
+        <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+          <h2 className="font-heading font-black text-xl flex items-center gap-2 text-foreground">
+            Tu Pedido
+          </h2>
+          <button 
+            onClick={() => setIsCartOpen(false)}
+            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Cart Items */}
+        <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4 styled-scrollbar">
+          {cart.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-4">
+              <span className="text-4xl">🛒</span>
+              <p className="font-medium text-center">Tu carrito está vacío.<br/>Agrega productos desde el catálogo.</p>
+            </div>
+          ) : (
+            cart.map((item) => (
+              <div key={item.id} className="flex gap-4 p-4 border border-gray-100 rounded-2xl bg-white shadow-sm">
+                <div className="flex-1 flex flex-col justify-between">
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-primary mb-1 block">
+                      {item.categoria || "General"}
+                    </span>
+                    <h3 className="font-bold text-sm text-foreground leading-tight mb-2">
+                      {item.nombre}
+                    </h3>
+                  </div>
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="font-black text-primary">
+                      ${(item.precio * item.cantidad).toLocaleString("es-AR")}
+                    </span>
+                    
+                    <div className="flex items-center bg-gray-50 rounded-lg p-1 border border-gray-100">
+                      <button 
+                        onClick={() => updateQuantity(item.id, item.cantidad - 1)}
+                        className="p-1 hover:bg-white rounded shadow-sm text-gray-600 transition-colors"
+                      >
+                        <Minus size={14} />
+                      </button>
+                      <span className="w-8 text-center text-sm font-bold">{item.cantidad}</span>
+                      <button 
+                        onClick={() => updateQuantity(item.id, item.cantidad + 1)}
+                        className="p-1 hover:bg-white rounded shadow-sm text-gray-600 transition-colors"
+                      >
+                        <Plus size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => removeFromCart(item.id)}
+                  className="text-gray-300 hover:text-red-500 transition-colors self-start p-1"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Footer / Checkout */}
+        {cart.length > 0 && (
+          <div className="p-6 bg-gray-50 border-t border-gray-100 flex flex-col gap-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-medium text-gray-500">Total Estimado</span>
+              <span className="text-2xl font-black text-foreground">
+                ${total.toLocaleString("es-AR")}
+              </span>
+            </div>
+            
+            <div className="flex flex-col gap-2">
+              <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">
+                Tu Nombre
+              </label>
+              <input
+                type="text"
+                placeholder="Ej. Joaquín Rosas"
+                value={clientName}
+                onChange={(e) => setClientName(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium"
+              />
+            </div>
+
+            <button
+              onClick={handleSendOrder}
+              disabled={cart.length === 0}
+              className="w-full mt-2 py-4 px-6 bg-[#25D366] text-white rounded-xl font-black tracking-widest uppercase text-sm shadow-lg shadow-[#25D366]/20 hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:hover:translate-y-0"
+            >
+              <MessageCircle size={20} />
+              Enviar Pedido
+            </button>
+          </div>
+        )}
+
+      </div>
+    </>
+  );
+}

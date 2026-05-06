@@ -1,6 +1,8 @@
 "use client";
 
 import { Product } from "@/services/products";
+import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 interface ProductCardProps {
   product: Product;
@@ -8,6 +10,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onClick }: ProductCardProps) {
+  const { addToCart } = useCart();
   // Format price as ARS
   const formattedPrice = new Intl.NumberFormat("es-AR", {
     style: "currency",
@@ -18,7 +21,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
 
   return (
     <div 
-      className="group bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 flex flex-col h-full hover:-translate-y-1"
+      className="group bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 flex flex-col h-full hover:-translate-y-1 relative"
       onClick={() => onClick(product)}
     >
       {/* Container force background white and object-contain */}
@@ -55,9 +58,22 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
           <span className="text-lg md:text-xl font-black text-foreground">
             {formattedPrice}
           </span>
-          <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </div>
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart({
+                id: product.id,
+                nombre: product.nombre,
+                categoria: product.categoria || "General",
+                precio: product.precio,
+                image_url: product.image_url
+              });
+            }}
+            className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
+            title="Agregar al carrito"
+          >
+            <ShoppingCart size={18} />
+          </button>
         </div>
       </div>
     </div>

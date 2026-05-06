@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { getProducts, getCategories, Product } from "@/services/products";
-import { getWhatsAppLink } from "@/config/constants";
 
 interface Category {
   id: number;
   nombre: string;
 }
 import ProductCard from "./ProductCard";
-import { Search, ChevronLeft, ChevronRight, X, MessageCircle } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, X, ShoppingCart, Minus, Plus } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 const ITEMS_PER_PAGE = 24;
 
@@ -27,6 +27,13 @@ export default function ProductGrid() {
 
   // Modal State
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [modalQuantity, setModalQuantity] = useState(1);
+  const { addToCart } = useCart();
+
+  const handleOpenModal = (product: Product) => {
+    setSelectedProduct(product);
+    setModalQuantity(1);
+  };
 
   // Debounce search
   useEffect(() => {
@@ -81,12 +88,6 @@ export default function ProductGrid() {
     setSelectedCategory(cat);
     setSearchQuery(""); // Limpiar búsqueda al cambiar categoría
     setPage(1); // reset to page 1 on category change
-  };
-
-  const createWhatsAppLink = (product: Product) => {
-    const categoriaTexto = product.categoria ? `${product.categoria} - ` : "";
-    const message = `Hola, estuve viendo su catálogo online y me interesa conocer más sobre: *${categoriaTexto}${product.nombre}*.\n\n¿Podrían brindarme información sobre precio y disponibilidad?`;
-    return getWhatsAppLink(message);
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -185,7 +186,7 @@ export default function ProductGrid() {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {products.map(p => (
-              <ProductCard key={p.id} product={p} onClick={setSelectedProduct} />
+              <ProductCard key={p.id} product={p} onClick={handleOpenModal} />
             ))}
           </div>
         )}
@@ -268,15 +269,43 @@ export default function ProductGrid() {
                   </span>
                 </div>
 
-                <a
-                  href={createWhatsAppLink(selectedProduct)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-4 px-6 bg-[#25D366] text-white rounded-xl font-bold tracking-widest uppercase text-sm shadow-lg shadow-[#25D366]/20 hover:shadow-xl hover:shadow-[#25D366]/30 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-3"
-                >
-                  <MessageCircle size={20} />
-                  Consultar por WhatsApp
-                </a>
+                <div className="flex flex-col gap-4 mt-2">
+                  <div className="flex items-center justify-between bg-gray-50 rounded-xl p-2 border border-gray-100">
+                    <span className="text-sm font-bold text-gray-500 ml-2">Cantidad</span>
+                    <div className="flex items-center gap-4">
+                      <button 
+                        onClick={() => setModalQuantity(Math.max(1, modalQuantity - 1))}
+                        className="w-10 h-10 rounded-lg hover:bg-white flex items-center justify-center text-gray-600 transition-colors shadow-sm"
+                      >
+                        <Minus size={18} />
+                      </button>
+                      <span className="text-xl font-black w-8 text-center">{modalQuantity}</span>
+                      <button 
+                        onClick={() => setModalQuantity(modalQuantity + 1)}
+                        className="w-10 h-10 rounded-lg hover:bg-white flex items-center justify-center text-gray-600 transition-colors shadow-sm"
+                      >
+                        <Plus size={18} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      addToCart({
+                        id: selectedProduct.id,
+                        nombre: selectedProduct.nombre,
+                        categoria: selectedProduct.categoria || "General",
+                        precio: selectedProduct.precio,
+                        image_url: selectedProduct.image_url
+                      }, modalQuantity);
+                      setSelectedProduct(null);
+                    }}
+                    className="w-full py-4 px-6 bg-primary text-white rounded-xl font-black tracking-widest uppercase text-sm shadow-lg shadow-primary/20 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-3"
+                  >
+                    <ShoppingCart size={20} />
+                    Agregar al Carrito
+                  </button>
+                </div>
               </div>
             </div>
           </div>
