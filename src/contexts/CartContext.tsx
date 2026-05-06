@@ -21,6 +21,7 @@ interface CartContextType {
   setIsCartOpen: (isOpen: boolean) => void;
   total: number;
   itemCount: number;
+  showToast: (message: string) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -29,6 +30,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Cargar de localStorage
   useEffect(() => {
@@ -50,6 +52,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [cart, isMounted]);
 
+  const showToast = (message: string) => {
+    setToastMessage(message);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
   const addToCart = (item: Omit<CartItem, "cantidad">, cantidad: number = 1) => {
     setCart((prev) => {
       const existing = prev.find((i) => i.id === item.id);
@@ -60,7 +67,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, { ...item, cantidad }];
     });
-    setIsCartOpen(true);
+    showToast("🛒 Producto agregado al carrito");
   };
 
   const removeFromCart = (id: number) => {
@@ -94,9 +101,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setIsCartOpen,
         total,
         itemCount,
+        showToast,
       }}
     >
       {children}
+      {toastMessage && (
+        <div className="fixed top-4 right-4 z-[200] bg-gray-900 text-white px-6 py-3 rounded-xl shadow-2xl font-bold animate-in fade-in slide-in-from-top-4 flex items-center gap-3">
+          {toastMessage}
+        </div>
+      )}
     </CartContext.Provider>
   );
 }

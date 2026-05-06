@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
 import { X, Minus, Plus, Trash2, MessageCircle } from "lucide-react";
 import { getWhatsAppLink } from "@/config/constants";
@@ -8,6 +8,17 @@ import { getWhatsAppLink } from "@/config/constants";
 export default function CartSidebar() {
   const { cart, removeFromCart, updateQuantity, isCartOpen, setIsCartOpen, total } = useCart();
   const [clientName, setClientName] = useState("");
+  const [clientPhone, setClientPhone] = useState("");
+  const [observations, setObservations] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedName = localStorage.getItem("manitos_cliente_nombre");
+      const savedPhone = localStorage.getItem("manitos_cliente_telefono");
+      if (savedName) setClientName(savedName);
+      if (savedPhone) setClientPhone(savedPhone);
+    }
+  }, []);
 
   if (!isCartOpen) return null;
 
@@ -17,6 +28,9 @@ export default function CartSidebar() {
       return;
     }
 
+    localStorage.setItem("manitos_cliente_nombre", clientName.trim());
+    localStorage.setItem("manitos_cliente_telefono", clientPhone.trim());
+
     const productosTexto = cart
       .map((i) => {
         const catTexto = i.categoria && i.categoria !== "General" ? `${i.categoria} - ` : "";
@@ -25,7 +39,7 @@ export default function CartSidebar() {
       })
       .join("\n");
 
-    const message = `Hola, le comparto el detalle del pedido:\n\nCliente: ${clientName.trim()}\n\nProductos:\n${productosTexto}\n\nTotal: $${total.toLocaleString("es-AR")}\n\n¿Podrían confirmarme disponibilidad y formas de pago?`;
+    const message = `Hola, le comparto el detalle del pedido:\n\nCliente: ${clientName.trim()}\nTeléfono: ${clientPhone.trim() || 'No especificado'}\n\nProductos:\n${productosTexto}\n\nTotal: $${total.toLocaleString("es-AR")}\n\nObservaciones: ${observations.trim() || 'Ninguna'}\n\n¿Podrían confirmarme disponibilidad y formas de pago?`;
 
     window.open(getWhatsAppLink(message), "_blank");
   };
@@ -113,17 +127,43 @@ export default function CartSidebar() {
               </span>
             </div>
             
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">
-                Tu Nombre
-              </label>
-              <input
-                type="text"
-                placeholder="Ej. Joaquín Rosas"
-                value={clientName}
-                onChange={(e) => setClientName(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium"
-              />
+            <div className="flex flex-col gap-3">
+              <div>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-1 block">
+                  Tu Nombre *
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ej. Joaquín Rosas"
+                  value={clientName}
+                  onChange={(e) => setClientName(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-1 block">
+                  Tu Teléfono (Opcional)
+                </label>
+                <input
+                  type="tel"
+                  placeholder="Ej. 11 1234-5678"
+                  value={clientPhone}
+                  onChange={(e) => setClientPhone(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-1 block">
+                  Observaciones (Opcional)
+                </label>
+                <textarea
+                  placeholder="Ej. Entregar por la mañana..."
+                  value={observations}
+                  onChange={(e) => setObservations(e.target.value)}
+                  rows={2}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all resize-none"
+                />
+              </div>
             </div>
 
             <button
