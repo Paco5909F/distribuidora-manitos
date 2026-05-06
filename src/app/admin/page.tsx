@@ -45,12 +45,12 @@ export default function AdminDashboard() {
           <div className="w-14 h-14 bg-gradient-to-br from-blue-50 to-blue-100/50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-inner border border-white">
             <Package size={28} />
           </div>
-          <h2 className="text-xl font-black font-heading tracking-tight mb-2 text-foreground group-hover:text-blue-600 transition-colors">Maestro de Inventario</h2>
+          <h2 className="text-xl font-black font-heading tracking-tight mb-2 text-foreground group-hover:text-blue-600 transition-colors">Gestión de Productos</h2>
           <p className="text-sm font-medium text-gray-500 mb-8 flex-grow leading-relaxed">
-            Control integral del catálogo. Sincroniza stock, edita registros, gestiona precios masivos y organiza imágenes de forma profesional.
+            Administrá tu catálogo: precios, stock, imágenes y organización de productos.
           </p>
           <div className="flex items-center text-sm font-bold text-blue-600 uppercase tracking-widest gap-2 group-hover:gap-3 transition-all pt-4 border-t border-gray-50">
-            Acceder al Módulo <ArrowRight size={16} />
+            Gestionar catálogo <ArrowRight size={16} />
           </div>
         </Link>
 
@@ -59,12 +59,12 @@ export default function AdminDashboard() {
           <div className="w-14 h-14 bg-gradient-to-br from-emerald-50 to-emerald-100/50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 shadow-inner border border-white">
             <FileText size={28} />
           </div>
-          <h2 className="text-xl font-black font-heading tracking-tight mb-2 text-foreground group-hover:text-emerald-600 transition-colors">Motor de Presupuestos</h2>
+          <h2 className="text-xl font-black font-heading tracking-tight mb-2 text-foreground group-hover:text-emerald-600 transition-colors">Generador de Presupuestos</h2>
           <p className="text-sm font-medium text-gray-500 mb-8 flex-grow leading-relaxed">
-            Ensamblador de pedidos en tiempo real. Configura cotizaciones con PDF dinámico para clientes mayoristas y envíalos en un solo click.
+            Creá presupuestos rápidamente y enviá cotizaciones listas para tus clientes.
           </p>
           <div className="flex items-center text-sm font-bold text-emerald-600 uppercase tracking-widest gap-2 group-hover:gap-3 transition-all pt-4 border-t border-gray-50">
-            Generar Cotización <ArrowRight size={16} />
+            Crear presupuesto <ArrowRight size={16} />
           </div>
         </Link>
         
