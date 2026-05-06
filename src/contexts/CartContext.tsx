@@ -106,7 +106,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     >
       {children}
       {toastMessage && (
-        <div className="fixed top-4 right-4 z-[200] bg-gray-900 text-white px-6 py-3 rounded-xl shadow-2xl font-bold animate-in fade-in slide-in-from-top-4 flex items-center gap-3">
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[200] bg-white text-gray-800 px-4 py-2 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-gray-100 font-bold text-sm animate-in fade-in slide-in-from-bottom-4 flex items-center gap-2 whitespace-nowrap">
           {toastMessage}
         </div>
       )}

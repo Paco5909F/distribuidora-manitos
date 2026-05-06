@@ -9,6 +9,9 @@ export default function CartSidebar() {
   const { cart, removeFromCart, updateQuantity, isCartOpen, setIsCartOpen, total } = useCart();
   const [clientName, setClientName] = useState("");
   const [clientPhone, setClientPhone] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [deliveryMethod, setDeliveryMethod] = useState("");
+  const [address, setAddress] = useState("");
   const [observations, setObservations] = useState("");
 
   useEffect(() => {
@@ -31,6 +34,11 @@ export default function CartSidebar() {
     localStorage.setItem("manitos_cliente_nombre", clientName.trim());
     localStorage.setItem("manitos_cliente_telefono", clientPhone.trim());
 
+    if (!paymentMethod || !deliveryMethod || (deliveryMethod === "Envío a domicilio" && !address.trim())) {
+      alert("Por favor completa la forma de pago y el método de entrega (con dirección si aplica).");
+      return;
+    }
+
     const productosTexto = cart
       .map((i) => {
         const catTexto = i.categoria && i.categoria !== "General" ? `${i.categoria} - ` : "";
@@ -39,7 +47,18 @@ export default function CartSidebar() {
       })
       .join("\n");
 
-    const message = `Hola, le comparto el detalle del pedido:\n\nCliente: ${clientName.trim()}\nTeléfono: ${clientPhone.trim() || 'No especificado'}\n\nProductos:\n${productosTexto}\n\nTotal: $${total.toLocaleString("es-AR")}\n\nObservaciones: ${observations.trim() || 'Ninguna'}\n\n¿Podrían confirmarme disponibilidad y formas de pago?`;
+    let message = `Hola, le comparto el detalle del pedido:\n\nCliente: ${clientName.trim()}\nTeléfono: ${clientPhone.trim() || 'No especificado'}\n`;
+    message += `Forma de pago: ${paymentMethod}\n`;
+    message += `Método de entrega: ${deliveryMethod}\n`;
+    if (deliveryMethod === "Envío a domicilio") {
+      message += `Dirección: ${address.trim()}\n`;
+    }
+    
+    message += `\nProductos:\n${productosTexto}\n\nTotal: $${total.toLocaleString("es-AR")}\n`;
+    if (observations.trim()) {
+      message += `\nObservaciones: ${observations.trim()}\n`;
+    }
+    message += `\n¿Podrían confirmarme disponibilidad?`;
 
     window.open(getWhatsAppLink(message), "_blank");
   };
@@ -152,6 +171,51 @@ export default function CartSidebar() {
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all"
                 />
               </div>
+              <div>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-1 block">
+                  Forma de pago *
+                </label>
+                <select
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all bg-white"
+                >
+                  <option value="" disabled>Selecciona una opción</option>
+                  <option value="Efectivo">Efectivo</option>
+                  <option value="Transferencia">Transferencia</option>
+                  <option value="Acordar con el vendedor">Acordar con el vendedor</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-1 block">
+                  Método de entrega *
+                </label>
+                <select
+                  value={deliveryMethod}
+                  onChange={(e) => setDeliveryMethod(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all bg-white"
+                >
+                  <option value="" disabled>Selecciona una opción</option>
+                  <option value="Retiro por sucursal">Retiro por sucursal</option>
+                  <option value="Envío a domicilio">Envío a domicilio</option>
+                </select>
+              </div>
+              
+              {deliveryMethod === "Envío a domicilio" && (
+                <div className="animate-in fade-in slide-in-from-top-2">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-1 block">
+                    Dirección de envío *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Tu dirección completa"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all"
+                  />
+                </div>
+              )}
+              
               <div>
                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-1 block">
                   Observaciones (Opcional)
