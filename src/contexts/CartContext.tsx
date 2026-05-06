@@ -67,7 +67,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, { ...item, cantidad }];
     });
-    showToast(item.nombre);
+    showToast("Producto agregado con éxito");
   };
 
   const removeFromCart = (id: number) => {
@@ -106,12 +106,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     >
       {children}
       {toastMessage && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[200] bg-white border border-gray-100 px-6 py-3 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.08)] animate-in fade-in slide-in-from-top-4 flex items-center gap-4">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          <div className="flex flex-col">
-            <span className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Agregado al carrito</span>
-            <span className="text-sm md:text-base font-black text-slate-800 uppercase leading-none max-w-[200px] md:max-w-[300px] truncate">{toastMessage}</span>
-          </div>
+        <div className="fixed top-24 right-4 z-[200] bg-gray-900/95 backdrop-blur text-white px-5 py-3 rounded-xl shadow-2xl animate-in fade-in slide-in-from-right-8 flex items-center gap-3">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span className="text-sm font-semibold tracking-wide">{toastMessage}</span>
         </div>
       )}
     </CartContext.Provider>
