@@ -43,9 +43,9 @@ export default function CartSidebar() {
       .map((i) => {
         const catTexto = i.categoria && i.categoria !== "General" ? `${i.categoria} - ` : "";
         const subtotal = i.precio * i.cantidad;
-        return `• ${catTexto}${i.nombre} x${i.cantidad} → $${subtotal.toLocaleString("es-AR")}`;
+        return `• ${catTexto}${i.nombre}\n  Cantidad: ${i.cantidad}\n  Subtotal: $${subtotal.toLocaleString("es-AR")}`;
       })
-      .join("\n");
+      .join("\n\n");
 
     let message = `Hola, le comparto mi pedido realizado desde el catálogo online de Distribuidora Manitos.\n\n`;
     
