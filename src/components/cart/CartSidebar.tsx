@@ -153,7 +153,7 @@ export default function CartSidebar() {
                 </label>
                 <input
                   type="text"
-                  placeholder="Ej. Joaquín Rosas"
+                  placeholder="Ingresa tu nombre y apellido"
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all"
