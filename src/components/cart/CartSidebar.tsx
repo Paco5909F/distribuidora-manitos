@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
 import { X, Minus, Plus, Trash2, MessageCircle } from "lucide-react";
-import { getWhatsAppLink } from "@/config/constants";
+import { getWhatsAppLink, TENANT_CONFIG } from "@/config/constants";
 
 export default function CartSidebar() {
   const { cart, removeFromCart, updateQuantity, isCartOpen, setIsCartOpen, total } = useCart();
@@ -16,8 +16,8 @@ export default function CartSidebar() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const savedName = localStorage.getItem("manitos_cliente_nombre");
-      const savedPhone = localStorage.getItem("manitos_cliente_telefono");
+      const savedName = localStorage.getItem(TENANT_CONFIG.storage.clientNameKey);
+      const savedPhone = localStorage.getItem(TENANT_CONFIG.storage.clientPhoneKey);
       if (savedName) setClientName(savedName);
       if (savedPhone) setClientPhone(savedPhone);
     }
@@ -31,8 +31,8 @@ export default function CartSidebar() {
       return;
     }
 
-    localStorage.setItem("manitos_cliente_nombre", clientName.trim());
-    localStorage.setItem("manitos_cliente_telefono", clientPhone.trim());
+    localStorage.setItem(TENANT_CONFIG.storage.clientNameKey, clientName.trim());
+    localStorage.setItem(TENANT_CONFIG.storage.clientPhoneKey, clientPhone.trim());
 
     if (!paymentMethod || !deliveryMethod || (deliveryMethod === "Envío a domicilio" && !address.trim())) {
       alert("Por favor completa la forma de pago y el método de entrega (con dirección si aplica).");
@@ -47,7 +47,7 @@ export default function CartSidebar() {
       })
       .join("\n\n");
 
-    let message = `Hola, le comparto mi pedido realizado desde el catálogo online de Distribuidora Manitos.\n\n`;
+    let message = `Hola, le comparto mi pedido realizado desde el catálogo online de ${TENANT_CONFIG.name}.\n\n`;
     
     message += `👤 Cliente\n`;
     message += `• Nombre: ${clientName.trim()}\n`;

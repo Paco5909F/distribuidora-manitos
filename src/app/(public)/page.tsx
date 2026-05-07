@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MessageCircle } from "lucide-react";
-import { getWhatsAppLink, COMPANY_CONFIG } from "@/config/constants";
+import { getWhatsAppLink, TENANT_CONFIG } from "@/config/constants";
 
 export default function Home() {
   return (
@@ -44,7 +44,7 @@ export default function Home() {
             Ver Catálogo
           </Link>
           <a
-            href={getWhatsAppLink(COMPANY_CONFIG.commercialMessage)}
+            href={getWhatsAppLink(TENANT_CONFIG.commercialMessage)}
             target="_blank"
             rel="noopener noreferrer"
             className="group px-8 py-4 bg-white border border-border text-foreground text-sm tracking-widest uppercase font-bold rounded-full shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3"

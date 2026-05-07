@@ -93,11 +93,14 @@ export async function getProducts({ page, limit, category, search }: FetchProduc
   const data = res.data || [];
   const count = res.count || 0;
 
-  // Mapear image_url dinámicamente ya que no está en la base de datos (según script.sql)
-  const mappedData = data?.map(p => ({
-    ...p,
-    image_url: supabase.storage.from("imagenes").getPublicUrl(`productos/${p.id}.webp`).data.publicUrl + `?v=${Date.now()}`
-  })) as Product[];
+  // Mapear image_url usando updated_at para no romper la caché del navegador
+  const mappedData = data?.map(p => {
+    const timestamp = p.updated_at ? new Date(p.updated_at).getTime() : Date.now();
+    return {
+      ...p,
+      image_url: supabase.storage.from("imagenes").getPublicUrl(`productos/${p.id}.webp`).data.publicUrl + `?v=${timestamp}`
+    };
+  }) as Product[];
 
   return { data: mappedData, count: count || 0 };
 }

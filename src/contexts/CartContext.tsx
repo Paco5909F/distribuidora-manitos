@@ -2,6 +2,8 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
+import { TENANT_CONFIG } from "@/config/constants";
+
 export interface CartItem {
   id: number;
   nombre: string;
@@ -35,7 +37,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Cargar de localStorage
   useEffect(() => {
     setIsMounted(true);
-    const savedCart = localStorage.getItem("manitos_cart");
+    const savedCart = localStorage.getItem(TENANT_CONFIG.storage.cartKey);
     if (savedCart) {
       try {
         setCart(JSON.parse(savedCart));
@@ -48,7 +50,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Guardar en localStorage
   useEffect(() => {
     if (isMounted) {
-      localStorage.setItem("manitos_cart", JSON.stringify(cart));
+      localStorage.setItem(TENANT_CONFIG.storage.cartKey, JSON.stringify(cart));
     }
   }, [cart, isMounted]);
 

@@ -10,6 +10,9 @@ interface Category {
 import ProductCard from "./ProductCard";
 import { Search, ChevronLeft, ChevronRight, X, ShoppingCart, Minus, Plus } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import Image from "next/image";
+
+import { useDebounce } from "@/hooks/useDebounce";
 
 const ITEMS_PER_PAGE = 24;
 
@@ -23,8 +26,7 @@ export default function ProductGrid() {
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("Todas");
   const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-
+  
   // Modal State
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [modalQuantity, setModalQuantity] = useState(1);
@@ -36,13 +38,12 @@ export default function ProductGrid() {
   };
 
   // Debounce search
+  const debouncedSearch = useDebounce(searchQuery, 500);
+
+  // Reset page when search changes
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(searchQuery);
-      setPage(1); // reset to page 1 on search
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
+    setPage(1);
+  }, [debouncedSearch]);
 
   const [debugMsg, setDebugMsg] = useState<string>("");
 
@@ -232,14 +233,13 @@ export default function ProductGrid() {
             {/* Image Container */}
             <div className="w-full md:w-1/2 aspect-square md:min-h-[400px] bg-white relative border-b md:border-b-0 md:border-r border-gray-100 flex items-center justify-center p-4 md:p-8 shrink-0">
               {selectedProduct.image_url ? (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
+                <Image
                   src={selectedProduct.image_url}
                   alt={selectedProduct.nombre}
-                  loading="lazy"
-                  decoding="async"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="absolute inset-0 w-full h-full object-contain p-6"
-                  onError={(e) => {
+                  onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.nextElementSibling?.classList.remove('hidden');
                   }}

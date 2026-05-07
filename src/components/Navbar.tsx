@@ -5,6 +5,7 @@ import { Menu, X, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import { TENANT_CONFIG } from "@/config/constants";
 
 const navLinks = [
   { name: "Inicio", href: "/" },
@@ -43,7 +44,7 @@ export default function Navbar() {
           <div className="relative w-32 md:w-36 h-full flex items-center justify-center">
             <Image 
               src="/brand/logo.png" 
-              alt="Distribuidora Manitos Logo" 
+              alt={`${TENANT_CONFIG.name} Logo`} 
               fill
               sizes="(max-width: 768px) 128px, 144px"
               className="object-contain object-left md:object-center hover:scale-105 transition-transform origin-left" 

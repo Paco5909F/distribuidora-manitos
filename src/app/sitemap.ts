@@ -1,7 +1,9 @@
 import { MetadataRoute } from 'next'
 
+import { TENANT_CONFIG } from '@/config/constants'
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://distribuidoramanitos.com'
+  const baseUrl = TENANT_CONFIG.seo.domain
 
   return [
     {

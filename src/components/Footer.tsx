@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getWhatsAppLink } from "@/config/constants";
+import { getWhatsAppLink, TENANT_CONFIG } from "@/config/constants";
 import Image from "next/image";
 import { Mail } from "lucide-react";
 import { WhatsAppIcon } from "./WhatsAppIcon";
@@ -22,14 +22,14 @@ export default function Footer() {
           <Link href="/" className="flex items-center gap-3 group">
             <Image
               src="/brand/logo.png"
-              alt="Distribuidora Manitos Logo"
+              alt={`${TENANT_CONFIG.name} Logo`}
               width={40}
               height={40}
               priority
               className="group-hover:scale-110 transition-transform"
             />
             <span className="font-heading text-xl font-bold text-white">
-              Distribuidora Manitos
+              {TENANT_CONFIG.name}
             </span>
           </Link>
           <p className="text-sm text-gray-400 text-center md:text-left max-w-xs">
@@ -76,7 +76,7 @@ export default function Footer() {
 
 
       <div className="container mx-auto px-6 md:px-12 mt-10 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
-        <p>© 2026 Distribuidora Manitos. Todos los derechos reservados.</p>
+        <p>© {new Date().getFullYear()} {TENANT_CONFIG.name}. Todos los derechos reservados.</p>
         <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
           <p>Buenos Aires, Argentina</p>
           <span className="hidden md:inline text-white/20">•</span>

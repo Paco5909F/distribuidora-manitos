@@ -13,23 +13,25 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
+import { TENANT_CONFIG } from "@/config/constants";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://distribuidoramanitos.com"),
-  title: "Distribuidora Manitos | Todo para Mascotas y Jardinería",
-  description: "En Distribuidora Manitos vas a encontrar el mejor catálogo mayorista y minorista de productos para mascotas (perros, gatos, roedores) y artículos de jardinería.",
-  keywords: ["Distribuidora Manitos", "alimento para perros", "alimento para gatos", "mascotas", "jardinería", "mayorista mascotas", "accesorios mascotas"],
-  authors: [{ name: "Distribuidora Manitos" }],
+  title: TENANT_CONFIG.seo.title,
+  description: TENANT_CONFIG.seo.description,
+  keywords: [TENANT_CONFIG.name, "alimento para perros", "alimento para gatos", "mascotas", "jardinería", "mayorista mascotas", "accesorios mascotas"],
+  authors: [{ name: TENANT_CONFIG.name }],
   openGraph: {
-    title: "Distribuidora Manitos | Todo para Mascotas y Jardinería",
-    description: "Catálogo completo de productos para tus mascotas y jardín.",
+    title: TENANT_CONFIG.seo.title,
+    description: TENANT_CONFIG.seo.description,
     url: "https://distribuidoramanitos.com",
-    siteName: "Distribuidora Manitos",
+    siteName: TENANT_CONFIG.name,
     images: [
       {
         url: "/brand/logo.png",
         width: 800,
         height: 800,
-        alt: "Distribuidora Manitos Logo",
+        alt: `${TENANT_CONFIG.name} Logo`,
       },
     ],
     locale: "es_AR",
@@ -37,8 +39,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Distribuidora Manitos | Mascotas y Jardinería",
-    description: "Encontrá los mejores precios para tu mascota y tu jardín.",
+    title: TENANT_CONFIG.seo.title,
+    description: TENANT_CONFIG.seo.description,
     images: ["/brand/logo.png"],
   },
   robots: {
