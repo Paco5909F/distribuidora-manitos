@@ -43,22 +43,36 @@ export default function CartSidebar() {
       .map((i) => {
         const catTexto = i.categoria && i.categoria !== "General" ? `${i.categoria} - ` : "";
         const subtotal = i.precio * i.cantidad;
-        return `- ${catTexto}${i.nombre} x${i.cantidad} → $${subtotal.toLocaleString("es-AR")}`;
+        return `• ${catTexto}${i.nombre} x${i.cantidad} → $${subtotal.toLocaleString("es-AR")}`;
       })
       .join("\n");
 
-    let message = `Hola, le comparto el detalle del pedido:\n\nCliente: ${clientName.trim()}\nTeléfono: ${clientPhone.trim() || 'No especificado'}\n`;
-    message += `Forma de pago: ${paymentMethod}\n`;
-    message += `Método de entrega: ${deliveryMethod}\n`;
-    if (deliveryMethod === "Envío a domicilio") {
-      message += `Dirección: ${address.trim()}\n`;
+    let message = `Hola, le comparto mi pedido realizado desde el catálogo online de Distribuidora Manitos.\n\n`;
+    
+    message += `👤 Cliente\n`;
+    message += `• Nombre: ${clientName.trim()}\n`;
+    if (clientPhone.trim()) {
+      message += `• Teléfono: ${clientPhone.trim()}\n`;
     }
     
-    message += `\nProductos:\n${productosTexto}\n\nTotal: $${total.toLocaleString("es-AR")}\n`;
-    if (observations.trim()) {
-      message += `\nObservaciones: ${observations.trim()}\n`;
+    message += `\n🛒 Productos\n${productosTexto}\n`;
+
+    message += `\n📦 Entrega\n`;
+    message += `• ${deliveryMethod}\n`;
+    if (deliveryMethod === "Envío a domicilio") {
+      message += `• Dirección: ${address.trim()}\n`;
     }
-    message += `\n¿Podrían confirmarme disponibilidad?`;
+
+    message += `\n💳 Pago\n`;
+    message += `• ${paymentMethod}\n`;
+
+    if (observations.trim()) {
+      message += `\n📝 Observaciones\n`;
+      message += `• ${observations.trim()}\n`;
+    }
+
+    message += `\n💰 Total: $${total.toLocaleString("es-AR")}\n\n`;
+    message += `Quedo atento a la confirmación del pedido y disponibilidad. Muchas gracias.`;
 
     window.open(getWhatsAppLink(message), "_blank");
   };
