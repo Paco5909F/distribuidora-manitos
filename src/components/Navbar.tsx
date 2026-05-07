@@ -46,8 +46,9 @@ export default function Navbar() {
               src="/brand/logo.png" 
               alt={`${TENANT_CONFIG.name} Logo`} 
               fill
+              priority
               sizes="(max-width: 768px) 128px, 144px"
-              className="object-contain object-left md:object-center hover:scale-105 transition-transform origin-left" 
+              className="object-contain object-left md:object-center hover:scale-105 transition-transform origin-left w-auto h-auto" 
             />
           </div>
         </Link>

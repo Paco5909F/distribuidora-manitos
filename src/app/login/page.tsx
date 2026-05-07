@@ -51,7 +51,8 @@ export default function LoginPage() {
               src="/brand/logo.png"
               alt="Distribuidora Manitos Logo"
               fill
-              className="object-contain drop-shadow-2xl"
+              sizes="(max-width: 768px) 256px, 256px"
+              className="object-contain drop-shadow-2xl w-auto h-auto"
               priority
             />
           </div>
