@@ -238,6 +238,7 @@ export default function ProductGrid() {
                   alt={selectedProduct.nombre}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  unoptimized={true}
                   className="absolute inset-0 w-full h-full object-contain p-6"
                   onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                     e.currentTarget.style.display = 'none';
