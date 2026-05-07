@@ -106,11 +106,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     >
       {children}
       {toastMessage && (
-        <div className="fixed top-24 right-4 z-[200] bg-primary text-white px-4 py-2.5 rounded-full shadow-[0_8px_30px_rgba(14,165,233,0.3)] animate-in fade-in slide-in-from-right-8 flex items-center gap-2 border border-white/20">
+        <div className="fixed top-32 right-6 md:right-10 z-[200] bg-primary text-white px-5 py-3 rounded-full shadow-[0_8px_30px_rgba(14,165,233,0.3)] animate-in fade-in slide-in-from-right-8 flex items-center gap-3 border border-white/20">
           <div className="bg-white/20 rounded-full p-1">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </div>
-          <span className="text-xs md:text-sm font-bold tracking-wide">{toastMessage}</span>
+          <span className="text-sm font-bold tracking-wide">{toastMessage}</span>
         </div>
       )}
     </CartContext.Provider>
