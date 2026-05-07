@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
-import { X, Minus, Plus, Trash2, MessageCircle } from "lucide-react";
+import { X, Minus, Plus, Trash2, MessageCircle, User } from "lucide-react";
 import { getWhatsAppLink, TENANT_CONFIG } from "@/config/constants";
 
 export default function CartSidebar() {
@@ -155,7 +155,12 @@ export default function CartSidebar() {
           {/* Checkout Form */}
           {cart.length > 0 && (
             <div className="flex flex-col gap-4 pt-6 border-t border-gray-100">
-              <h3 className="font-black text-foreground mb-2">Tus Datos</h3>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <User size={16} />
+                </div>
+                <h3 className="font-black text-foreground">Completa tus datos</h3>
+              </div>
               
               <div className="flex flex-col gap-4">
                 <div>
