@@ -40,3 +40,7 @@ AGENTS.local.md
 
 # Antigravity / Agent Artifacts
 artifacts/
+
+# Database / Security
+docs/db_scripts/
+*.sql
