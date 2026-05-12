@@ -36,4 +36,4 @@ coverage/
 # Agents
 .agents/
 AGENTS.md
-AGENTS.local.md
+AGENTS.local.md\n# Antigravity / Agent Artifacts\nartifacts/\n
