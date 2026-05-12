@@ -186,7 +186,7 @@ export default function ProductGrid() {
               <Search className="text-gray-300 w-10 h-10" />
             </div>
             <h3 className="font-heading text-2xl font-black text-gray-800 mb-2">No encontramos nada</h3>
-            <p className="text-gray-500 font-medium max-w-md">No hay productos que coincidan con "{searchQuery || selectedCategory}". Intenta con otra búsqueda o selecciona "Todas las categorías".</p>
+            <p className="text-gray-500 font-medium max-w-md">No hay productos que coincidan con &quot;{searchQuery || selectedCategory}&quot;. Intenta con otra búsqueda o selecciona &quot;Todas las categorías&quot;.</p>
             {(searchQuery || selectedCategory !== "Todas") && (
               <button 
                 onClick={() => { setSearchQuery(""); setSelectedCategory("Todas"); setPage(1); }}

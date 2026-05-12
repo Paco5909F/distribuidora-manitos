@@ -33,7 +33,7 @@ export function useAdminProducts(): UseAdminProductsResult {
 
       // Si no tenemos caché O si nos pasan un customBuster (ej: producto editado/agregado), vamos a la DB.
       if (!allProductsCache.current || customBuster) {
-        let query = supabase.from("productos").select(`
+        const query = supabase.from("productos").select(`
           id,
           nombre,
           precio,
