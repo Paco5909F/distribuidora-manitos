@@ -55,7 +55,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [cart, isMounted]);
 
   const showToast = (message: string) => {
-    toast.error(message);
+    toast.error(message, { id: "cart-validation" });
   };
 
   const addToCart = (item: Omit<CartItem, "cantidad">, cantidad: number = 1) => {
