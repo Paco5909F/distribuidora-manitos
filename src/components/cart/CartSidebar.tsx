@@ -6,10 +6,11 @@ import { X, Minus, Plus, Trash2, MessageCircle, User, ArrowLeft, ArrowRight } fr
 import { getWhatsAppLink, TENANT_CONFIG } from "@/config/constants";
 
 export default function CartSidebar() {
-  const { cart, removeFromCart, updateQuantity, isCartOpen, setIsCartOpen, total, showToast } = useCart();
+  const { cart, removeFromCart, updateQuantity, isCartOpen, setIsCartOpen, total, showToast, syncCartWithDatabase } = useCart();
   
   // State for Wizard
   const [step, setStep] = useState<1 | 2>(1);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   // Form State
   const [clientName, setClientName] = useState("");
@@ -45,7 +46,7 @@ export default function CartSidebar() {
     setStep(2);
   };
 
-  const handleSendOrder = () => {
+  const handleSendOrder = async () => {
     if (!clientName.trim()) {
       showToast("Por favor, ingresa tu nombre");
       return;
@@ -66,6 +67,17 @@ export default function CartSidebar() {
 
     if (deliveryMethod === "Envío a domicilio" && !address.trim()) {
       showToast("Por favor, ingresa tu dirección de envío");
+      return;
+    }
+
+    setIsSyncing(true);
+    const syncResult = await syncCartWithDatabase();
+    setIsSyncing(false);
+
+    if (!syncResult.success) {
+      // Mostrar el primer error y volver al paso 1 para que revise
+      showToast(syncResult.messages[0]);
+      setStep(1);
       return;
     }
 
@@ -217,7 +229,7 @@ export default function CartSidebar() {
                     placeholder="Ingresa tu nombre y apellido"
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-base font-medium transition-all"
                   />
                 </div>
                 <div>
@@ -229,7 +241,7 @@ export default function CartSidebar() {
                     placeholder="Ej. 11 1234-5678"
                     value={clientPhone}
                     onChange={(e) => setClientPhone(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-base font-medium transition-all"
                   />
                 </div>
                 <div>
@@ -239,7 +251,7 @@ export default function CartSidebar() {
                   <select
                     value={paymentMethod}
                     onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-base font-medium transition-all bg-white"
                   >
                     <option value="" disabled>Selecciona una opción</option>
                     <option value="Efectivo">Efectivo</option>
@@ -254,7 +266,7 @@ export default function CartSidebar() {
                   <select
                     value={deliveryMethod}
                     onChange={(e) => setDeliveryMethod(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-base font-medium transition-all bg-white"
                   >
                     <option value="" disabled>Selecciona una opción</option>
                     <option value="Retiro por sucursal">Retiro por sucursal</option>
@@ -272,7 +284,7 @@ export default function CartSidebar() {
                       placeholder="Tu dirección completa"
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-base font-medium transition-all"
                     />
                   </div>
                 )}
@@ -286,7 +298,7 @@ export default function CartSidebar() {
                     value={observations}
                     onChange={(e) => setObservations(e.target.value)}
                     rows={2}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-base font-medium transition-all resize-none"
                   />
                 </div>
               </div>
@@ -314,10 +326,20 @@ export default function CartSidebar() {
             ) : (
               <button
                 onClick={handleSendOrder}
-                className="w-full py-4 px-6 bg-[#25D366] text-white rounded-xl font-black tracking-widest uppercase text-sm shadow-lg shadow-[#25D366]/20 hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-3"
+                disabled={isSyncing}
+                className="w-full py-4 px-6 bg-[#25D366] text-white rounded-xl font-black tracking-widest uppercase text-sm shadow-lg shadow-[#25D366]/20 hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-70 disabled:hover:translate-y-0 transition-all flex items-center justify-center gap-3"
               >
-                <MessageCircle size={20} />
-                Enviar por WhatsApp
+                {isSyncing ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Validando...
+                  </>
+                ) : (
+                  <>
+                    <MessageCircle size={20} />
+                    Enviar por WhatsApp
+                  </>
+                )}
               </button>
             )}
           </div>

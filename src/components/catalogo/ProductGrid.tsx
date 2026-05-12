@@ -29,13 +29,15 @@ export default function ProductGrid() {
   
   // Modal State
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [modalImageError, setModalImageError] = useState(false);
   const [modalQuantity, setModalQuantity] = useState(1);
   const { addToCart } = useCart();
 
-  const handleOpenModal = (product: Product) => {
+  const handleOpenModal = useCallback((product: Product) => {
     setSelectedProduct(product);
     setModalQuantity(1);
-  };
+    setModalImageError(false);
+  }, []);
 
   // Debounce search
   const debouncedSearch = useDebounce(searchQuery, 500);
@@ -218,9 +220,9 @@ export default function ProductGrid() {
 
       {/* Product Modal */}
       {selectedProduct && (
-        <div className="fixed inset-0 z-[110] flex items-end md:items-center justify-center md:p-6">
+        <div className="fixed inset-0 z-[110] flex items-end md:items-center justify-center p-4 md:p-6">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedProduct(null)} />
-          <div className="relative w-full max-w-3xl bg-white md:rounded-3xl rounded-t-3xl md:h-auto h-[90dvh] shadow-2xl overflow-y-auto overflow-x-hidden flex flex-col md:flex-row animate-in slide-in-from-bottom-10 md:zoom-in-95 duration-300">
+          <div className="relative w-full max-w-3xl bg-white md:rounded-3xl rounded-t-3xl max-h-[100dvh] md:max-h-[90vh] shadow-2xl overflow-y-auto overflow-x-hidden flex flex-col md:flex-row animate-in slide-in-from-bottom-10 md:zoom-in-95 duration-300">
 
             {/* Close Button */}
             <button
@@ -239,16 +241,13 @@ export default function ProductGrid() {
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   unoptimized={true}
-                  className="absolute inset-0 w-full h-full object-contain p-6"
-                  onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                  }}
+                  className={`absolute inset-0 w-full h-full object-contain p-6 ${modalImageError ? 'hidden' : ''}`}
+                  onError={() => setModalImageError(true)}
                 />
               ) : null}
 
               {/* Fallback */}
-              <div className={`flex flex-col items-center justify-center text-gray-300 border-2 border-dashed border-gray-100 rounded-2xl absolute inset-6 bg-white ${selectedProduct.image_url ? 'hidden' : ''}`}>
+              <div className={`flex flex-col items-center justify-center text-gray-300 border-2 border-dashed border-gray-100 rounded-2xl absolute inset-6 bg-white ${selectedProduct.image_url && !modalImageError ? 'hidden' : ''}`}>
                 <span className="text-lg font-medium">Sin imagen</span>
               </div>
             </div>

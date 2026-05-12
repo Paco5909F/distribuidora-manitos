@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, memo } from "react";
 import { Product } from "@/services/products";
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
@@ -10,8 +11,9 @@ interface ProductCardProps {
   onClick: (product: Product) => void;
 }
 
-export default function ProductCard({ product, onClick }: ProductCardProps) {
+const ProductCard = memo(function ProductCard({ product, onClick }: ProductCardProps) {
   const { addToCart } = useCart();
+  const [imageError, setImageError] = useState(false);
   // Format price as ARS
   const formattedPrice = new Intl.NumberFormat("es-AR", {
     style: "currency",
@@ -34,16 +36,13 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
             fill
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
             unoptimized={true}
-            className="absolute inset-0 w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300"
-            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.nextElementSibling?.classList.remove('hidden');
-            }}
+            className={`absolute inset-0 w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300 ${imageError ? 'hidden' : ''}`}
+            onError={() => setImageError(true)}
           />
         ) : null}
         
         {/* Fallback shown if no image_url or if image fails to load */}
-        <div className={`flex items-center justify-center text-gray-300 border-2 border-dashed border-gray-100 rounded-xl absolute inset-4 bg-white ${product.image_url ? 'hidden' : ''}`}>
+        <div className={`flex items-center justify-center text-gray-300 border-2 border-dashed border-gray-100 rounded-xl absolute inset-4 bg-white ${product.image_url && !imageError ? 'hidden' : ''}`}>
           <span className="text-sm font-medium">Sin imagen</span>
         </div>
       </div>
@@ -79,4 +78,6 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
       </div>
     </div>
   );
-}
+});
+
+export default ProductCard;

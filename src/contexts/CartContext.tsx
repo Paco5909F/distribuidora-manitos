@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 import { TENANT_CONFIG } from "@/config/constants";
+import { createClient } from "@/utils/supabase/client";
 
 export interface CartItem {
   id: number;
@@ -24,6 +25,7 @@ interface CartContextType {
   total: number;
   itemCount: number;
   showToast: (message: string) => void;
+  syncCartWithDatabase: () => Promise<{ success: boolean; messages: string[] }>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -88,6 +90,55 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearCart = () => setCart([]);
 
+  const syncCartWithDatabase = async () => {
+    if (cart.length === 0) return { success: true, messages: [] };
+
+    const supabase = createClient();
+    const ids = cart.map(i => i.id);
+    
+    try {
+      const { data: dbProducts, error } = await supabase
+        .from('v_productos')
+        .select('id, precio, activo, categoria')
+        .in('id', ids);
+
+      if (error) throw error;
+
+      let hasChanges = false;
+      const messages: string[] = [];
+      
+      const newCart = cart.map(item => {
+        const dbItem = dbProducts?.find(p => p.id === item.id);
+        
+        // Producto no existe o fue desactivado
+        if (!dbItem || !dbItem.activo) {
+          hasChanges = true;
+          messages.push(`El producto "${item.nombre}" ya no está disponible y fue removido.`);
+          return null;
+        }
+
+        // Cambio de precio
+        if (dbItem.precio !== item.precio) {
+          hasChanges = true;
+          messages.push(`El precio de "${item.nombre}" se actualizó de $${item.precio} a $${dbItem.precio}.`);
+          return { ...item, precio: dbItem.precio, categoria: dbItem.categoria };
+        }
+
+        return item;
+      }).filter(Boolean) as CartItem[];
+
+      if (hasChanges) {
+        setCart(newCart);
+        return { success: false, messages };
+      }
+
+      return { success: true, messages: [] };
+    } catch (error) {
+      console.error("Error sincronizando carrito:", error);
+      return { success: false, messages: ["Error de conexión al verificar productos. Intenta nuevamente."] };
+    }
+  };
+
   const total = cart.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
   const itemCount = cart.reduce((acc, item) => acc + item.cantidad, 0);
 
@@ -104,6 +155,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         total,
         itemCount,
         showToast,
+        syncCartWithDatabase,
       }}
     >
       {children}
