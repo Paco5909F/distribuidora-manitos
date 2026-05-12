@@ -48,7 +48,7 @@ export default function Navbar() {
               fill
               priority
               sizes="(max-width: 768px) 128px, 144px"
-              className="object-contain object-left md:object-center hover:scale-105 transition-transform origin-left w-auto h-auto" 
+              className="object-contain object-left md:object-center hover:scale-105 transition-transform origin-left" 
             />
           </div>
         </Link>
