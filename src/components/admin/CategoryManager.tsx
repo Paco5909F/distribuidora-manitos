@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { Plus, Edit2, Trash2, Search } from "lucide-react";
+import { Plus, Edit2, Trash2, Search, Eye, EyeOff } from "lucide-react";
 
 interface Category {
   id: number;
   nombre: string;
   created_at: string;
+  activo: boolean;
 }
 
 export default function CategoryManager() {
@@ -108,6 +109,15 @@ export default function CategoryManager() {
     }
   };
 
+  const handleToggleVisibility = async (id: number, currentStatus: boolean) => {
+    const { error } = await supabase.from("categorias").update({ activo: !currentStatus }).eq("id", id);
+    if (!error) {
+      fetchCategories();
+    } else {
+      alert("Error al cambiar visibilidad");
+    }
+  };
+
   const filteredCategories = categories.filter((c) =>
     c.nombre.toLowerCase().includes(search.toLowerCase())
   );
@@ -139,11 +149,16 @@ export default function CategoryManager() {
                     <div key={cat.id} className={`flex items-center justify-between p-3 rounded-lg border transition-all ${editingId === cat.id ? 'bg-primary/5 border-primary/20' : 'bg-white border-transparent hover:border-gray-200 shadow-sm'}`}>
                       <div className="flex items-center gap-4 cursor-pointer flex-grow" onClick={() => selectForEdit(cat)}>
                         <div>
-                          <h3 className="text-sm font-bold text-foreground leading-tight uppercase relative">{cat.nombre}</h3>
-                          <p className="text-[10px] font-bold text-gray-400 tracking-wider mt-1">ID: {cat.id}</p>
+                          <h3 className={`text-sm font-bold leading-tight uppercase relative ${cat.activo ? 'text-foreground' : 'text-gray-400 line-through'}`}>
+                            {cat.nombre}
+                          </h3>
+                          <p className="text-[10px] font-bold text-gray-400 tracking-wider mt-1">ID: {cat.id} {!cat.activo && "• OCULTA"}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2 px-2 shrink-0">
+                         <button onClick={() => handleToggleVisibility(cat.id, cat.activo)} className={`p-2 transition-colors bg-gray-50 hover:bg-white rounded-full ${cat.activo ? 'text-primary hover:text-primary' : 'text-gray-400 hover:text-foreground'}`} title={cat.activo ? "Ocultar categoría del catálogo público" : "Mostrar categoría en el catálogo público"}>
+                           {cat.activo ? <Eye size={16} /> : <EyeOff size={16} />}
+                         </button>
                          <button onClick={() => selectForEdit(cat)} className="p-2 text-gray-400 hover:text-primary transition-colors bg-gray-50 hover:bg-white rounded-full"><Edit2 size={16} /></button>
                          <button onClick={() => handleDelete(cat.id)} className="p-2 text-gray-400 hover:text-red-500 transition-colors bg-gray-50 hover:bg-white rounded-full"><Trash2 size={16} /></button>
                       </div>

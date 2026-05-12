@@ -67,10 +67,15 @@ export async function getProducts({ page, limit, category, search }: FetchProduc
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
+  // 1. Obtener nombres de categorías activas
+  const { data: activeCatData } = await supabase.from('categorias').select('nombre').eq('activo', true);
+  const activeCategoryNames = activeCatData && activeCatData.length > 0 ? activeCatData.map(c => c.nombre) : ['_ninguna_'];
+
   let query = supabase
     .from('v_productos')
     .select('id, nombre, precio, categoria, activo, updated_at', { count: 'exact' })
     .eq('activo', true)
+    .in('categoria', activeCategoryNames)
     .order('nombre', { ascending: true });
 
   if (category && category !== 'Todas') {
@@ -109,6 +114,7 @@ export async function getCategories() {
   const { data, error } = await supabase
     .from('categorias')
     .select('*')
+    .eq('activo', true)
     .order('nombre');
 
   if (error) {

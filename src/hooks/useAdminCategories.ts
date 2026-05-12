@@ -6,6 +6,7 @@ export type FetchState = 'loading' | 'error' | 'empty' | 'success';
 interface Category {
   id: number;
   nombre: string;
+  activo?: boolean;
 }
 
 interface UseAdminCategoriesResult {
