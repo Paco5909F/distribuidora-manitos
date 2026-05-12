@@ -155,7 +155,6 @@ export default function PresupuestosPage() {
       const catTexto = i.categoria && i.categoria !== 'General' ? `${i.categoria} - ` : '';
       return `- ${catTexto}${i.nombre} x${i.cantidad}`;
     }).join('\n');
-    const fechaActual = new Date().toLocaleDateString('es-AR');
     return encodeURIComponent(
       `Hola, le comparto el presupuesto solicitado.\n\n` +
       `Cliente: ${cliente.trim()}\n\n` +
