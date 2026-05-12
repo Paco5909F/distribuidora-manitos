@@ -91,29 +91,29 @@ export default function CartSidebar() {
 
     let message = `Hola, le comparto mi pedido realizado desde el catálogo online de ${TENANT_CONFIG.name}.\n\n`;
     
-    message += `*Cliente*\n`;
+    message += `*👤 Cliente*\n`;
     message += `• Nombre: ${clientName.trim()}\n`;
     if (clientPhone.trim()) {
       message += `• Teléfono: ${clientPhone.trim()}\n`;
     }
     
-    message += `\n*Productos*\n${productosTexto}\n`;
+    message += `\n*🛒 Productos*\n${productosTexto}\n`;
 
-    message += `\n*Entrega*\n`;
+    message += `\n*📦 Entrega*\n`;
     message += `• ${deliveryMethod}\n`;
     if (deliveryMethod === "Envío a domicilio") {
       message += `• Dirección: ${address.trim()}\n`;
     }
 
-    message += `\n*Pago*\n`;
+    message += `\n*💳 Pago*\n`;
     message += `• ${paymentMethod}\n`;
 
     if (observations.trim()) {
-      message += `\n*Observaciones*\n`;
+      message += `\n*📝 Observaciones*\n`;
       message += `• ${observations.trim()}\n`;
     }
 
-    message += `\n*Total: $${total.toLocaleString("es-AR")}*\n\n`;
+    message += `\n*💰 Total: $${total.toLocaleString("es-AR")}*\n\n`;
     message += `Quedo atento a la confirmación del pedido y disponibilidad. Muchas gracias.`;
 
     window.location.href = getWhatsAppLink(message);
