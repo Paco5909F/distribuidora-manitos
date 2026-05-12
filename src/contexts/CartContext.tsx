@@ -161,8 +161,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       {children}
       {toastMessage && (
         <div 
-          className="fixed z-[99999] bg-primary text-white px-5 py-2.5 rounded-full shadow-[0_8px_30px_rgba(14,165,233,0.3)] animate-in fade-in slide-in-from-bottom-8 flex items-center gap-3 border border-white/20 left-1/2 -translate-x-1/2 w-max"
-          style={{ bottom: '32px', top: 'auto' }}
+          className="fixed bg-primary text-white px-5 py-2.5 rounded-full shadow-[0_8px_30px_rgba(14,165,233,0.3)] animate-in fade-in slide-in-from-top-8 flex items-center gap-3 border border-white/20 left-1/2 -translate-x-1/2 w-max"
+          style={{ top: '32px', zIndex: 99999 }}
         >
           <div className="bg-white/20 rounded-full p-1">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
