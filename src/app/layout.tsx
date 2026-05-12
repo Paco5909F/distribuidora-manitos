@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-heading' });
@@ -65,6 +66,7 @@ export default function RootLayout({
     <html lang="es" className={cn("font-sans scroll-smooth", inter.variable, outfit.variable)}>
       <body className="antialiased min-h-[100dvh] flex flex-col bg-background text-foreground">
         {children}
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   );

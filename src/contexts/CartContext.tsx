@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 import { TENANT_CONFIG } from "@/config/constants";
 import { createClient } from "@/utils/supabase/client";
+import { toast } from "sonner";
 
 export interface CartItem {
   id: number;
@@ -34,9 +35,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-  // Cargar de localStorage
   useEffect(() => {
     setIsMounted(true);
     const savedCart = localStorage.getItem(TENANT_CONFIG.storage.cartKey);
@@ -57,8 +55,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [cart, isMounted]);
 
   const showToast = (message: string) => {
-    setToastMessage(message);
-    setTimeout(() => setToastMessage(null), 3000);
+    toast.error(message);
   };
 
   const addToCart = (item: Omit<CartItem, "cantidad">, cantidad: number = 1) => {
@@ -71,7 +68,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, { ...item, cantidad }];
     });
-    showToast("Producto agregado con éxito");
+    toast.success("Producto agregado con éxito");
   };
 
   const removeFromCart = (id: number) => {
@@ -159,17 +156,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-      {toastMessage && (
-        <div 
-          className="fixed bg-primary text-white px-5 py-2.5 rounded-full shadow-[0_8px_30px_rgba(14,165,233,0.3)] animate-in fade-in slide-in-from-top-8 flex items-center gap-3 border border-white/20 left-1/2 -translate-x-1/2 w-max"
-          style={{ top: '32px', zIndex: 99999 }}
-        >
-          <div className="bg-white/20 rounded-full p-1">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          </div>
-          <span className="text-sm font-bold tracking-wide">{toastMessage}</span>
-        </div>
-      )}
     </CartContext.Provider>
   );
 }
