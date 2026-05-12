@@ -116,7 +116,7 @@ export default function CartSidebar() {
     message += `\n*Total: $${total.toLocaleString("es-AR")}*\n\n`;
     message += `Quedo atento a la confirmación del pedido y disponibilidad. Muchas gracias.`;
 
-    window.open(getWhatsAppLink(message), "_blank");
+    window.location.href = getWhatsAppLink(message);
   };
 
   return (
