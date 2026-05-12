@@ -157,7 +157,7 @@ export default function PresupuestosPage() {
     }).join('\n');
     const fechaActual = new Date().toLocaleDateString('es-AR');
     return encodeURIComponent(
-      `Hola, le comparto el presupuesto solicitado (${fechaActual}).\n\n` +
+      `Hola, le comparto el presupuesto solicitado.\n\n` +
       `Cliente: ${cliente.trim()}\n\n` +
       `${items.length ? `Productos:\n${productosTexto}\n\n` : ''}` +
       `Total: $${totalFinal.toLocaleString('es-AR')}\n\n` +
