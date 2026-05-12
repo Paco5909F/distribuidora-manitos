@@ -148,6 +148,7 @@ export default function CartSidebar() {
           </div>
           <button 
             onClick={() => setIsCartOpen(false)}
+            aria-label="Cerrar carrito"
             className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
           >
             <X size={20} />
@@ -184,6 +185,7 @@ export default function CartSidebar() {
                         <div className="flex items-center bg-gray-50 rounded-lg p-1 border border-gray-100">
                           <button 
                             onClick={() => updateQuantity(item.id, item.cantidad - 1)}
+                            aria-label="Disminuir cantidad"
                             className="p-1 hover:bg-white rounded shadow-sm text-gray-600 transition-colors"
                           >
                             <Minus size={14} />
@@ -191,6 +193,7 @@ export default function CartSidebar() {
                           <span className="w-8 text-center text-sm font-bold">{item.cantidad}</span>
                           <button 
                             onClick={() => updateQuantity(item.id, item.cantidad + 1)}
+                            aria-label="Aumentar cantidad"
                             className="p-1 hover:bg-white rounded shadow-sm text-gray-600 transition-colors"
                           >
                             <Plus size={14} />
@@ -200,6 +203,7 @@ export default function CartSidebar() {
                     </div>
                     <button 
                       onClick={() => removeFromCart(item.id)}
+                      aria-label="Eliminar del carrito"
                       className="text-gray-300 hover:text-red-500 transition-colors self-start p-1"
                     >
                       <Trash2 size={16} />

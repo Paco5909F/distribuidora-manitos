@@ -16,7 +16,7 @@ export const viewport: Viewport = {
 import { TENANT_CONFIG } from "@/config/constants";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://distribuidoramanitos.com"),
+  metadataBase: new URL(TENANT_CONFIG.seo.domain),
   title: TENANT_CONFIG.seo.title,
   description: TENANT_CONFIG.seo.description,
   keywords: [TENANT_CONFIG.name, "alimento para perros", "alimento para gatos", "mascotas", "jardinería", "mayorista mascotas", "accesorios mascotas"],
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: TENANT_CONFIG.seo.title,
     description: TENANT_CONFIG.seo.description,
-    url: "https://distribuidoramanitos.com",
+    url: TENANT_CONFIG.seo.domain,
     siteName: TENANT_CONFIG.name,
     images: [
       {

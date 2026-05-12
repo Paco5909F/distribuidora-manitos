@@ -181,10 +181,20 @@ export default function ProductGrid() {
             ))}
           </div>
         ) : products.length === 0 ? (
-          <div className="w-full h-64 flex flex-col items-center justify-center bg-white rounded-3xl border border-gray-100 p-8 text-center space-y-4">
-            <Search className="text-gray-300 w-16 h-16" />
-            <h3 className="font-heading text-xl font-bold text-gray-800">No se encontraron productos</h3>
-            <p className="text-gray-500">Intenta con otra búsqueda o categoría.</p>
+          <div className="w-full min-h-[300px] flex flex-col items-center justify-center bg-white rounded-3xl border border-gray-100 p-8 text-center animate-in fade-in zoom-in-95 duration-500 shadow-sm">
+            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
+              <Search className="text-gray-300 w-10 h-10" />
+            </div>
+            <h3 className="font-heading text-2xl font-black text-gray-800 mb-2">No encontramos nada</h3>
+            <p className="text-gray-500 font-medium max-w-md">No hay productos que coincidan con "{searchQuery || selectedCategory}". Intenta con otra búsqueda o selecciona "Todas las categorías".</p>
+            {(searchQuery || selectedCategory !== "Todas") && (
+              <button 
+                onClick={() => { setSearchQuery(""); setSelectedCategory("Todas"); setPage(1); }}
+                className="mt-6 text-primary font-bold hover:bg-primary/5 px-6 py-2 rounded-full transition-colors"
+              >
+                Limpiar filtros
+              </button>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -200,6 +210,7 @@ export default function ProductGrid() {
             <button
               onClick={() => setPage(p => Math.max(1, p - 1))}
               disabled={page === 1}
+              aria-label="Página anterior"
               className="p-2 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft size={20} />
@@ -210,6 +221,7 @@ export default function ProductGrid() {
             <button
               onClick={() => setPage(p => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
+              aria-label="Página siguiente"
               className="p-2 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronRight size={20} />
@@ -227,6 +239,7 @@ export default function ProductGrid() {
             {/* Close Button */}
             <button
               onClick={() => setSelectedProduct(null)}
+              aria-label="Cerrar detalle de producto"
               className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center bg-black/5 hover:bg-black/10 rounded-full transition-colors"
             >
               <X size={18} className="text-gray-600" />
@@ -275,6 +288,7 @@ export default function ProductGrid() {
                     <div className="flex items-center gap-4">
                       <button 
                         onClick={() => setModalQuantity(Math.max(1, modalQuantity - 1))}
+                        aria-label="Disminuir cantidad"
                         className="w-10 h-10 rounded-lg hover:bg-white flex items-center justify-center text-gray-600 transition-colors shadow-sm"
                       >
                         <Minus size={18} />
@@ -282,6 +296,7 @@ export default function ProductGrid() {
                       <span className="text-xl font-black w-8 text-center">{modalQuantity}</span>
                       <button 
                         onClick={() => setModalQuantity(modalQuantity + 1)}
+                        aria-label="Aumentar cantidad"
                         className="w-10 h-10 rounded-lg hover:bg-white flex items-center justify-center text-gray-600 transition-colors shadow-sm"
                       >
                         <Plus size={18} />

@@ -1,9 +1,16 @@
 import ProductGrid from "@/components/catalogo/ProductGrid";
 import { Metadata } from "next";
+import { TENANT_CONFIG } from "@/config/constants";
 
 export const metadata: Metadata = {
-  title: "Catálogo Mayorista y Minorista | Distribuidora Manitos",
-  description: "Explora nuestros +1000 productos para mascotas y jardinería.",
+  title: `Catálogo | ${TENANT_CONFIG.name}`,
+  description: "Explora nuestros productos para mascotas y jardinería. Filtra por categorías y encuentra calidad al mejor precio.",
+  openGraph: {
+    title: `Catálogo | ${TENANT_CONFIG.name}`,
+    description: "Explora nuestros productos para mascotas y jardinería.",
+    url: `${TENANT_CONFIG.seo.domain}/catalogo`,
+    images: [{ url: "/brand/logo.png" }],
+  }
 };
 
 export default function CatalogoPage() {

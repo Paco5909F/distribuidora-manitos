@@ -23,7 +23,7 @@ const ProductCard = memo(function ProductCard({ product, onClick }: ProductCardP
   }).format(product.precio);
 
   return (
-    <div 
+    <article 
       className="group bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 flex flex-col h-full hover:-translate-y-1 relative"
       onClick={() => onClick(product)}
     >
@@ -76,7 +76,7 @@ const ProductCard = memo(function ProductCard({ product, onClick }: ProductCardP
           </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 });
 
