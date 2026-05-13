@@ -68,7 +68,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, { ...item, cantidad }];
     });
-    toast.success("Producto agregado con éxito");
+    toast.success("Producto agregado con éxito", { id: "cart-add" });
   };
 
   const removeFromCart = (id: number) => {
