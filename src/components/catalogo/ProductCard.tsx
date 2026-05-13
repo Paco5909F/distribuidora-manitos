@@ -11,7 +11,10 @@ interface ProductCardProps {
   onClick: (product: Product) => void;
 }
 
-const ProductCard = memo(function ProductCard({ product, onClick }: ProductCardProps) {
+const ProductCard = memo(function ProductCard({
+  product,
+  onClick,
+}: ProductCardProps) {
   const { addToCart } = useCart();
   const [imageError, setImageError] = useState(false);
   // Format price as ARS
@@ -23,7 +26,7 @@ const ProductCard = memo(function ProductCard({ product, onClick }: ProductCardP
   }).format(product.precio);
 
   return (
-    <article 
+    <article
       className="group bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 flex flex-col h-full hover:-translate-y-1 relative"
       onClick={() => onClick(product)}
     >
@@ -36,13 +39,15 @@ const ProductCard = memo(function ProductCard({ product, onClick }: ProductCardP
             fill
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
             unoptimized={true}
-            className={`absolute inset-0 w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300 ${imageError ? 'hidden' : ''}`}
+            className={`absolute inset-0 w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300 ${imageError ? "hidden" : ""}`}
             onError={() => setImageError(true)}
           />
         ) : null}
-        
+
         {/* Fallback shown if no image_url or if image fails to load */}
-        <div className={`flex items-center justify-center text-gray-300 border-2 border-dashed border-gray-100 rounded-xl absolute inset-4 bg-white ${product.image_url && !imageError ? 'hidden' : ''}`}>
+        <div
+          className={`flex items-center justify-center text-gray-300 border-2 border-dashed border-gray-100 rounded-xl absolute inset-4 bg-white ${product.image_url && !imageError ? "hidden" : ""}`}
+        >
           <span className="text-sm font-medium">Sin imagen</span>
         </div>
       </div>
@@ -58,7 +63,7 @@ const ProductCard = memo(function ProductCard({ product, onClick }: ProductCardP
           <span className="text-lg md:text-xl font-black text-foreground">
             {formattedPrice}
           </span>
-          <button 
+          <button
             onClick={(e) => {
               e.stopPropagation();
               addToCart({
@@ -66,7 +71,7 @@ const ProductCard = memo(function ProductCard({ product, onClick }: ProductCardP
                 nombre: product.nombre,
                 categoria: product.categoria || "General",
                 precio: product.precio,
-                image_url: product.image_url
+                image_url: product.image_url,
               });
             }}
             className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors"

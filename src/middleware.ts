@@ -1,18 +1,18 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
     request: {
       headers: request.headers,
     },
-  })
+  });
 
   // Evita checkeos innecesarios en assets o imágenes
   if (
-    request.nextUrl.pathname.startsWith('/_next') ||
-    request.nextUrl.pathname.startsWith('/favicon.ico') ||
-    request.nextUrl.pathname.startsWith('/imagenes')
+    request.nextUrl.pathname.startsWith("/_next") ||
+    request.nextUrl.pathname.startsWith("/favicon.ico") ||
+    request.nextUrl.pathname.startsWith("/imagenes")
   ) {
     return response;
   }
@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
     {
       cookies: {
         get(name: string) {
-          return request.cookies.get(name)?.value
+          return request.cookies.get(name)?.value;
         },
         set(name: string, value: string, options: CookieOptions) {
           // This allows Next.js routing to properly update cookies
@@ -31,59 +31,62 @@ export async function middleware(request: NextRequest) {
             name,
             value,
             ...options,
-          })
+          });
           response = NextResponse.next({
             request: {
               headers: request.headers,
             },
-          })
+          });
           response.cookies.set({
             name,
             value,
             ...options,
-          })
+          });
         },
         remove(name: string, options: CookieOptions) {
           request.cookies.set({
             name,
-            value: '',
+            value: "",
             ...options,
-          })
+          });
           response = NextResponse.next({
             request: {
               headers: request.headers,
             },
-          })
+          });
           response.cookies.set({
             name,
-            value: '',
+            value: "",
             ...options,
-          })
+          });
         },
       },
-    }
-  )
+    },
+  );
 
   // Autenticar la sesión
-  const { data: { session }, error } = await supabase.auth.getSession()
+  const {
+    data: { session },
+    error,
+  } = await supabase.auth.getSession();
 
   // Si intentan entrar a /admin o subrutas y no están logueados
-  if (request.nextUrl.pathname.startsWith('/admin')) {
+  if (request.nextUrl.pathname.startsWith("/admin")) {
     if (!session || error) {
-      const loginUrl = new URL('/login', request.url)
-      return NextResponse.redirect(loginUrl)
+      const loginUrl = new URL("/login", request.url);
+      return NextResponse.redirect(loginUrl);
     }
   }
 
   // Si intentan entrar a /login pero ya están logueados
-  if (request.nextUrl.pathname === '/login') {
+  if (request.nextUrl.pathname === "/login") {
     if (session) {
-      const adminUrl = new URL('/admin', request.url)
-      return NextResponse.redirect(adminUrl)
+      const adminUrl = new URL("/admin", request.url);
+      return NextResponse.redirect(adminUrl);
     }
   }
 
-  return response
+  return response;
 }
 
 export const config = {
@@ -94,6 +97,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
-}
+};

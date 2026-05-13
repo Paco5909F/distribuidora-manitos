@@ -3,14 +3,18 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function bulkUpdatePrices(categoria_nombre: string, formType: string, authValue: number) {
+export async function bulkUpdatePrices(
+  categoria_nombre: string,
+  formType: string,
+  authValue: number,
+) {
   const supabase = createClient();
-  
+
   try {
-    const { data, error } = await supabase.rpc('bulk_update_prices', {
+    const { data, error } = await supabase.rpc("bulk_update_prices", {
       p_categoria_nombre: categoria_nombre,
       p_form_type: formType,
-      p_auth_value: authValue
+      p_auth_value: authValue,
     });
 
     if (error) {
@@ -25,7 +29,6 @@ export async function bulkUpdatePrices(categoria_nombre: string, formType: strin
     revalidatePath("/catalogo");
     revalidatePath("/admin");
     return { success: true };
-
   } catch (err) {
     const error = err as Error;
     console.error("Bulk update error:", error);

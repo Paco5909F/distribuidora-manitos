@@ -11,7 +11,6 @@ export default function Home() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[100px] pointer-events-none -z-10" />
 
       <div className="max-w-4xl w-full flex flex-col items-center text-center animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out">
-
         {/* Logo de la empresa */}
         <div className="relative w-full max-w-[200px] md:max-w-[320px] aspect-square md:aspect-auto md:h-[250px] mb-2 drop-shadow-[0_20px_50px_rgba(14,165,233,0.15)] flex items-center justify-center animate-in zoom-in-95 duration-1000">
           <Image
@@ -27,11 +26,10 @@ export default function Home() {
         <span className="text-primary tracking-[0.4em] uppercase text-xs md:text-sm font-black mb-4 block mt-4">
           Mayorista y Minorista
         </span>
-        <h1 className="sr-only">
-          Distribuidora Manitos
-        </h1>
+        <h1 className="sr-only">Distribuidora Manitos</h1>
         <p className="text-base md:text-xl text-muted-foreground font-semibold text-balance mb-10 max-w-2xl leading-relaxed opacity-90 mt-2">
-          El catálogo más completo en productos para perros, gatos, roedores y artículos de jardinería. Encontrá calidad al mejor precio.
+          El catálogo más completo en productos para perros, gatos, roedores y
+          artículos de jardinería. Encontrá calidad al mejor precio.
         </p>
 
         {/* Botones de Acción */}
@@ -63,10 +61,20 @@ export default function Home() {
         <div className="bg-white/80 backdrop-blur-sm border border-primary/10 rounded-3xl p-8 md:p-12 shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] -z-10" />
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed font-medium mb-6">
-            Somos <strong className="text-foreground">Distribuidora Manitos</strong>, una empresa apasionada por el bienestar integral de tus mascotas y el cuidado de tus espacios verdes. Llevamos años ofreciendo el catálogo mayorista y minorista más completo del mercado.
+            Somos{" "}
+            <strong className="text-foreground">Distribuidora Manitos</strong>,
+            una empresa apasionada por el bienestar integral de tus mascotas y
+            el cuidado de tus espacios verdes. Llevamos años ofreciendo el
+            catálogo mayorista y minorista más completo del mercado.
           </p>
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed font-medium">
-            Nuestro objetivo es conectar a familias y comercios con artículos de primer nivel, desde accesorios y juguetes hasta herramientas especializadas, siempre combinando <strong className="text-primary">excelencia y el mejor precio</strong>.
+            Nuestro objetivo es conectar a familias y comercios con artículos de
+            primer nivel, desde accesorios y juguetes hasta herramientas
+            especializadas, siempre combinando{" "}
+            <strong className="text-primary">
+              excelencia y el mejor precio
+            </strong>
+            .
           </p>
         </div>
       </div>

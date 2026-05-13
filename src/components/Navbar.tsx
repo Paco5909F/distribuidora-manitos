@@ -34,25 +34,27 @@ export default function Navbar() {
         isScrolled ? "top-2 md:top-3" : "top-0 pt-4"
       }`}
     >
-      <div className={`flex items-center justify-between w-full h-[60px] md:h-[70px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] mx-auto max-w-4xl
-        ${isScrolled 
-          ? "px-6 rounded-full bg-white/80 backdrop-blur-2xl shadow-[0_10px_40px_rgba(14,165,233,0.15)] border border-primary/10" 
-          : "px-2 rounded-2xl bg-transparent border-transparent"
+      <div
+        className={`flex items-center justify-between w-full h-[60px] md:h-[70px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] mx-auto max-w-4xl
+        ${
+          isScrolled
+            ? "px-6 rounded-full bg-white/80 backdrop-blur-2xl shadow-[0_10px_40px_rgba(14,165,233,0.15)] border border-primary/10"
+            : "px-2 rounded-2xl bg-transparent border-transparent"
         }
-      `}>
+      `}
+      >
         <Link href="/" className="flex items-center shrink-0 h-full py-2">
           <div className="relative w-32 md:w-36 h-full flex items-center justify-center">
-            <Image 
-              src="/brand/logo.png" 
-              alt={`${TENANT_CONFIG.name} Logo`} 
+            <Image
+              src="/brand/logo.png"
+              alt={`${TENANT_CONFIG.name} Logo`}
               fill
               priority
               sizes="(max-width: 768px) 128px, 144px"
-              className="object-contain object-left md:object-center hover:scale-105 transition-transform origin-left" 
+              className="object-contain object-left md:object-center hover:scale-105 transition-transform origin-left"
             />
           </div>
         </Link>
-
 
         <div className="hidden md:flex items-center gap-4 lg:gap-6">
           {navLinks.map((link) => (
@@ -80,7 +82,6 @@ export default function Navbar() {
           </Link>
         </div>
 
-
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={`md:hidden p-2 focus:outline-none transition-colors text-foreground`}
@@ -88,7 +89,6 @@ export default function Navbar() {
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
-
 
       <AnimatePresence>
         {isOpen && (

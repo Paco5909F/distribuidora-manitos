@@ -8,7 +8,11 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-export default function SearchBar({ value, onChange, placeholder = "Buscar productos..." }: SearchBarProps) {
+export default function SearchBar({
+  value,
+  onChange,
+  placeholder = "Buscar productos...",
+}: SearchBarProps) {
   return (
     <div className="relative w-full">
       <input

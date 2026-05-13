@@ -12,7 +12,7 @@ export function useProducts(initialProducts: Product[]) {
   const filteredProducts = useMemo(() => {
     if (!search.trim()) return initialProducts;
     return initialProducts.filter((p) =>
-      p.nombre.toLowerCase().includes(search.toLowerCase())
+      p.nombre.toLowerCase().includes(search.toLowerCase()),
     );
   }, [search, initialProducts]);
 

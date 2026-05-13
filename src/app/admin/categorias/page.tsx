@@ -13,7 +13,7 @@ export default function CategoriasPage() {
           </p>
         </div>
       </div>
-      
+
       <div className="flex-grow min-h-0 bg-white/70 backdrop-blur-md rounded-2xl md:rounded-[2rem] shadow-sm overflow-hidden flex flex-col border border-white/40">
         <CategoryManager />
       </div>

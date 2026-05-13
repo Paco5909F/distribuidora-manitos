@@ -58,12 +58,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     toast.error(message, { id: "cart-validation" });
   };
 
-  const addToCart = (item: Omit<CartItem, "cantidad">, cantidad: number = 1) => {
+  const addToCart = (
+    item: Omit<CartItem, "cantidad">,
+    cantidad: number = 1,
+  ) => {
     setCart((prev) => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {
         return prev.map((i) =>
-          i.id === item.id ? { ...i, cantidad: i.cantidad + cantidad } : i
+          i.id === item.id ? { ...i, cantidad: i.cantidad + cantidad } : i,
         );
       }
       return [...prev, { ...item, cantidad }];
@@ -80,9 +83,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       removeFromCart(id);
       return;
     }
-    setCart((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, cantidad } : i))
-    );
+    setCart((prev) => prev.map((i) => (i.id === id ? { ...i, cantidad } : i)));
   };
 
   const clearCart = () => setCart([]);
@@ -91,38 +92,48 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (cart.length === 0) return { success: true, messages: [] };
 
     const supabase = createClient();
-    const ids = cart.map(i => i.id);
-    
+    const ids = cart.map((i) => i.id);
+
     try {
       const { data: dbProducts, error } = await supabase
-        .from('v_productos')
-        .select('id, precio, activo, categoria')
-        .in('id', ids);
+        .from("v_productos")
+        .select("id, precio, activo, categoria")
+        .in("id", ids);
 
       if (error) throw error;
 
       let hasChanges = false;
       const messages: string[] = [];
-      
-      const newCart = cart.map(item => {
-        const dbItem = dbProducts?.find(p => p.id === item.id);
-        
-        // Producto no existe o fue desactivado
-        if (!dbItem || !dbItem.activo) {
-          hasChanges = true;
-          messages.push(`El producto "${item.nombre}" ya no está disponible y fue removido.`);
-          return null;
-        }
 
-        // Cambio de precio
-        if (dbItem.precio !== item.precio) {
-          hasChanges = true;
-          messages.push(`El precio de "${item.nombre}" se actualizó de $${item.precio} a $${dbItem.precio}.`);
-          return { ...item, precio: dbItem.precio, categoria: dbItem.categoria };
-        }
+      const newCart = cart
+        .map((item) => {
+          const dbItem = dbProducts?.find((p) => p.id === item.id);
 
-        return item;
-      }).filter(Boolean) as CartItem[];
+          // Producto no existe o fue desactivado
+          if (!dbItem || !dbItem.activo) {
+            hasChanges = true;
+            messages.push(
+              `El producto "${item.nombre}" ya no está disponible y fue removido.`,
+            );
+            return null;
+          }
+
+          // Cambio de precio
+          if (dbItem.precio !== item.precio) {
+            hasChanges = true;
+            messages.push(
+              `El precio de "${item.nombre}" se actualizó de $${item.precio} a $${dbItem.precio}.`,
+            );
+            return {
+              ...item,
+              precio: dbItem.precio,
+              categoria: dbItem.categoria,
+            };
+          }
+
+          return item;
+        })
+        .filter(Boolean) as CartItem[];
 
       if (hasChanges) {
         setCart(newCart);
@@ -132,11 +143,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return { success: true, messages: [] };
     } catch (error) {
       console.error("Error sincronizando carrito:", error);
-      return { success: false, messages: ["Error de conexión al verificar productos. Intenta nuevamente."] };
+      return {
+        success: false,
+        messages: [
+          "Error de conexión al verificar productos. Intenta nuevamente.",
+        ],
+      };
     }
   };
 
-  const total = cart.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+  const total = cart.reduce(
+    (acc, item) => acc + item.precio * item.cantidad,
+    0,
+  );
   const itemCount = cart.reduce((acc, item) => acc + item.cantidad, 0);
 
   return (

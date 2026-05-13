@@ -1,7 +1,7 @@
-import { useState, useCallback, useEffect } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { useState, useCallback, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
-export type FetchState = 'loading' | 'error' | 'empty' | 'success';
+export type FetchState = "loading" | "error" | "empty" | "success";
 
 interface Category {
   id: number;
@@ -18,31 +18,33 @@ interface UseAdminCategoriesResult {
 
 export function useAdminCategories(): UseAdminCategoriesResult {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [state, setState] = useState<FetchState>('loading');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [state, setState] = useState<FetchState>("loading");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const fetchCategories = useCallback(async () => {
-    setState('loading');
-    setErrorMessage('');
-    
+    setState("loading");
+    setErrorMessage("");
+
     try {
-      const { data, error } = await supabase.from("categorias").select("*").order("nombre");
-      
+      const { data, error } = await supabase
+        .from("categorias")
+        .select("*")
+        .order("nombre");
+
       if (error) throw error;
-      
+
       if (!data || data.length === 0) {
-        setState('empty');
+        setState("empty");
         setCategories([]);
         return;
       }
-      
+
       setCategories(data);
-      setState('success');
-      
+      setState("success");
     } catch (err) {
       console.error("Error fetching categories:", err);
       setErrorMessage("No se pudieron cargar las categorías.");
-      setState('error');
+      setState("error");
     }
   }, []);
 

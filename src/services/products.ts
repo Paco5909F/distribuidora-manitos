@@ -20,7 +20,10 @@ export interface FetchProductsOptions {
 }
 
 const normalize = (text: string) =>
-  text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 
 const variants = (word: string) => {
   if (word.length <= 3) return [word];
@@ -41,21 +44,21 @@ const synonyms: Record<string, string[]> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const applySmartSearch = (baseQuery: any, searchInput: string) => {
   const normalized = normalize(searchInput);
-  const words = normalized.split(/\s+/).filter(w => w.length > 0);
+  const words = normalized.split(/\s+/).filter((w) => w.length > 0);
   let query = baseQuery;
 
-  words.forEach(word => {
+  words.forEach((word) => {
     const termVariants = variants(word);
     const expandedTerms = new Set<string>();
-    
-    termVariants.forEach(v => {
+
+    termVariants.forEach((v) => {
       expandedTerms.add(v);
-      if (synonyms[v]) synonyms[v].forEach(s => expandedTerms.add(s));
+      if (synonyms[v]) synonyms[v].forEach((s) => expandedTerms.add(s));
     });
 
-    const orConditions = Array.from(expandedTerms).map(term => 
-      `nombre.ilike.%${term}%,categoria.ilike.%${term}%`
-    ).join(',');
+    const orConditions = Array.from(expandedTerms)
+      .map((term) => `nombre.ilike.%${term}%,categoria.ilike.%${term}%`)
+      .join(",");
 
     query = query.or(orConditions);
   });
@@ -63,23 +66,36 @@ export const applySmartSearch = (baseQuery: any, searchInput: string) => {
   return query;
 };
 
-export async function getProducts({ page, limit, category, search }: FetchProductsOptions) {
+export async function getProducts({
+  page,
+  limit,
+  category,
+  search,
+}: FetchProductsOptions) {
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
   // 1. Obtener nombres de categorías activas
-  const { data: activeCatData } = await supabase.from('categorias').select('nombre').eq('activo', true);
-  const activeCategoryNames = activeCatData && activeCatData.length > 0 ? activeCatData.map(c => c.nombre) : ['_ninguna_'];
+  const { data: activeCatData } = await supabase
+    .from("categorias")
+    .select("nombre")
+    .eq("activo", true);
+  const activeCategoryNames =
+    activeCatData && activeCatData.length > 0
+      ? activeCatData.map((c) => c.nombre)
+      : ["_ninguna_"];
 
   let query = supabase
-    .from('v_productos')
-    .select('id, nombre, precio, categoria, activo, updated_at', { count: 'exact' })
-    .eq('activo', true)
-    .in('categoria', activeCategoryNames)
-    .order('nombre', { ascending: true });
+    .from("v_productos")
+    .select("id, nombre, precio, categoria, activo, updated_at", {
+      count: "exact",
+    })
+    .eq("activo", true)
+    .in("categoria", activeCategoryNames)
+    .order("nombre", { ascending: true });
 
-  if (category && category !== 'Todas') {
-    query = query.eq('categoria', category);
+  if (category && category !== "Todas") {
+    query = query.eq("categoria", category);
   }
 
   if (search) {
@@ -89,9 +105,9 @@ export async function getProducts({ page, limit, category, search }: FetchProduc
   query = query.range(from, to);
 
   const res = await query;
-  
+
   if (res.error) {
-    console.error('Error fetching products:', res.error);
+    console.error("Error fetching products:", res.error);
     return { data: [] as Product[], count: 0, error: res.error.message };
   }
 
@@ -99,11 +115,15 @@ export async function getProducts({ page, limit, category, search }: FetchProduc
   const count = res.count || 0;
 
   // Mapear image_url usando updated_at para no romper la caché del navegador
-  const mappedData = data?.map(p => {
-    const timestamp = p.updated_at ? new Date(p.updated_at).getTime() : Date.now();
+  const mappedData = data?.map((p) => {
+    const timestamp = p.updated_at
+      ? new Date(p.updated_at).getTime()
+      : Date.now();
     return {
       ...p,
-      image_url: supabase.storage.from("imagenes").getPublicUrl(`productos/${p.id}.webp`).data.publicUrl + `?v=${timestamp}`
+      image_url:
+        supabase.storage.from("imagenes").getPublicUrl(`productos/${p.id}.webp`)
+          .data.publicUrl + `?v=${timestamp}`,
     };
   }) as Product[];
 
@@ -112,13 +132,13 @@ export async function getProducts({ page, limit, category, search }: FetchProduc
 
 export async function getCategories() {
   const { data, error } = await supabase
-    .from('categorias')
-    .select('*')
-    .eq('activo', true)
-    .order('nombre');
+    .from("categorias")
+    .select("*")
+    .eq("activo", true)
+    .order("nombre");
 
   if (error) {
-    console.error('Error fetching categories:', error);
+    console.error("Error fetching categories:", error);
     throw new Error(error.message);
   }
 

@@ -8,7 +8,10 @@ interface FilterSidebarProps {
   activeCategory?: string | null;
 }
 
-export default function FilterSidebar({ categories, activeCategory }: FilterSidebarProps) {
+export default function FilterSidebar({
+  categories,
+  activeCategory,
+}: FilterSidebarProps) {
   return (
     <div className="w-full xl:w-64 flex-shrink-0 flex flex-col gap-6">
       <div className="flex items-center gap-2 font-heading font-semibold text-lg text-foreground border-b border-border/50 pb-4">

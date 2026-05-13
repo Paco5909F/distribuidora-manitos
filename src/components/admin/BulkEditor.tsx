@@ -44,27 +44,35 @@ export default function BulkEditor() {
 
   return (
     <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 mb-8">
-      <h2 className="text-xl font-heading font-black text-foreground mb-4">Edición Masiva de Precios</h2>
-      
+      <h2 className="text-xl font-heading font-black text-foreground mb-4">
+        Edición Masiva de Precios
+      </h2>
+
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
         <div>
-          <label className="text-sm font-bold text-gray-700 mb-1 block">Categoría</label>
-          <select 
-            value={selectedCat} 
+          <label className="text-sm font-bold text-gray-700 mb-1 block">
+            Categoría
+          </label>
+          <select
+            value={selectedCat}
             onChange={(e) => setSelectedCat(e.target.value)}
             className="w-full px-4 py-2 border border-gray-200 rounded-xl outline-none"
           >
             <option value="">Seleccione...</option>
-            {categories.map(c => (
-              <option key={c.id} value={c.nombre}>{c.nombre}</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.nombre}>
+                {c.nombre}
+              </option>
             ))}
           </select>
         </div>
 
         <div>
-          <label className="text-sm font-bold text-gray-700 mb-1 block">Operación</label>
-          <select 
-            value={editType} 
+          <label className="text-sm font-bold text-gray-700 mb-1 block">
+            Operación
+          </label>
+          <select
+            value={editType}
             onChange={(e) => setEditType(e.target.value)}
             className="w-full px-4 py-2 border border-gray-200 rounded-xl outline-none"
           >
@@ -75,9 +83,11 @@ export default function BulkEditor() {
         </div>
 
         <div>
-          <label className="text-sm font-bold text-gray-700 mb-1 block">Valor Numérico</label>
-          <input 
-            type="number" 
+          <label className="text-sm font-bold text-gray-700 mb-1 block">
+            Valor Numérico
+          </label>
+          <input
+            type="number"
             step="0.01"
             value={val}
             onChange={(e) => setVal(e.target.value)}
@@ -87,7 +97,7 @@ export default function BulkEditor() {
         </div>
 
         <div>
-          <button 
+          <button
             onClick={handleApply}
             disabled={loading}
             className="w-full py-2 bg-primary text-white font-bold rounded-xl disabled:opacity-50"
@@ -96,7 +106,9 @@ export default function BulkEditor() {
           </button>
         </div>
       </div>
-      {message && <p className="mt-4 text-sm font-medium text-primary">{message}</p>}
+      {message && (
+        <p className="mt-4 text-sm font-medium text-primary">{message}</p>
+      )}
     </div>
   );
 }

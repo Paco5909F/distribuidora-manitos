@@ -6,7 +6,18 @@ import { getWhatsAppLink, TENANT_CONFIG } from "@/config/constants";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 
 const InstagramIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
@@ -15,8 +26,10 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 
 export default function Contact() {
   return (
-    <section id="contacto" className="py-24 md:py-32 bg-transparent relative overflow-hidden flex items-center justify-center">
-
+    <section
+      id="contacto"
+      className="py-24 md:py-32 bg-transparent relative overflow-hidden flex items-center justify-center"
+    >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/20 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="container max-w-5xl mx-auto px-6 relative z-10 text-center">
@@ -27,7 +40,6 @@ export default function Contact() {
           transition={{ duration: 1, ease: "easeOut" }}
           className="relative bg-white/60 backdrop-blur-2xl rounded-[3rem] p-12 md:p-20 shadow-[0_20px_60px_rgb(0,0,0,0.05)] border border-white/80 overflow-hidden"
         >
-
           <div className="absolute top-0 left-0 w-24 h-24 border-t border-l border-primary/20 rounded-tl-[3rem]" />
           <div className="absolute bottom-0 right-0 w-24 h-24 border-b border-r border-primary/20 rounded-br-[3rem]" />
 
@@ -38,7 +50,8 @@ export default function Contact() {
             Estamos para <i className="font-light text-primary">ayudarte.</i>
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground mb-12 text-balance mx-auto max-w-2xl font-light">
-            Contactanos por WhatsApp. Consultá stock, precios mayoristas o realizá tu pedido directamente con un asesor comercial.
+            Contactanos por WhatsApp. Consultá stock, precios mayoristas o
+            realizá tu pedido directamente con un asesor comercial.
           </p>
 
           <motion.a
@@ -65,7 +78,9 @@ export default function Contact() {
               <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                 <MapPin size={28} />
               </div>
-              <span className="font-medium text-foreground/80 tracking-wide text-center">Chacabuco</span>
+              <span className="font-medium text-foreground/80 tracking-wide text-center">
+                Chacabuco
+              </span>
             </a>
 
             <a
@@ -76,7 +91,9 @@ export default function Contact() {
               <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                 <Mail size={28} />
               </div>
-              <span className="font-medium text-foreground/80 tracking-wide text-center text-sm md:text-base break-all">hola@manitos.com</span>
+              <span className="font-medium text-foreground/80 tracking-wide text-center text-sm md:text-base break-all">
+                hola@manitos.com
+              </span>
             </a>
 
             <a
@@ -89,7 +106,9 @@ export default function Contact() {
               <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                 <InstagramIcon className="w-7 h-7" />
               </div>
-              <span className="font-medium text-foreground/80 tracking-wide text-center">@distribuidoramanitos</span>
+              <span className="font-medium text-foreground/80 tracking-wide text-center">
+                @distribuidoramanitos
+              </span>
             </a>
           </div>
         </motion.div>

@@ -4,11 +4,11 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
-const outfit = Outfit({ subsets: ['latin'], variable: '--font-heading' });
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-heading" });
 
 export const viewport: Viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
@@ -20,7 +20,15 @@ export const metadata: Metadata = {
   metadataBase: new URL(TENANT_CONFIG.seo.domain),
   title: TENANT_CONFIG.seo.title,
   description: TENANT_CONFIG.seo.description,
-  keywords: [TENANT_CONFIG.name, "alimento para perros", "alimento para gatos", "mascotas", "jardinería", "mayorista mascotas", "accesorios mascotas"],
+  keywords: [
+    TENANT_CONFIG.name,
+    "alimento para perros",
+    "alimento para gatos",
+    "mascotas",
+    "jardinería",
+    "mayorista mascotas",
+    "accesorios mascotas",
+  ],
   authors: [{ name: TENANT_CONFIG.name }],
   openGraph: {
     title: TENANT_CONFIG.seo.title,
@@ -50,9 +58,9 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
 };
@@ -63,7 +71,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={cn("font-sans scroll-smooth", inter.variable, outfit.variable)}>
+    <html
+      lang="es"
+      className={cn("font-sans scroll-smooth", inter.variable, outfit.variable)}
+    >
       <body className="antialiased min-h-[100dvh] flex flex-col bg-background text-foreground">
         {children}
         <Toaster position="top-center" richColors />

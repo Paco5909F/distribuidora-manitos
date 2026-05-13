@@ -43,7 +43,6 @@ export default function LoginPage() {
       <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-400/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
 
       <div className="w-full max-w-md bg-white/95 backdrop-blur-sm rounded-[2rem] p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-white/50 relative z-10 w-[95%]">
-
         {/* Logo Central Gigante */}
         <div className="flex justify-center mb-0 mt-[-40px]">
           <div className="relative w-64 h-64 transform hover:scale-105 transition-transform duration-500">
@@ -108,12 +107,17 @@ export default function LoginPage() {
           >
             {loading ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            ) : "Ingresar al Sistema"}
+            ) : (
+              "Ingresar al Sistema"
+            )}
           </button>
         </form>
 
         <div className="mt-10 pt-6 border-t border-gray-50 text-center">
-          <a href="/" className="text-[11px] font-black uppercase tracking-widest text-gray-400 hover:text-primary transition-colors inline-block pb-1 border-b border-transparent hover:border-primary">
+          <a
+            href="/"
+            className="text-[11px] font-black uppercase tracking-widest text-gray-400 hover:text-primary transition-colors inline-block pb-1 border-b border-transparent hover:border-primary"
+          >
             Retornar al Sitio Público
           </a>
         </div>
