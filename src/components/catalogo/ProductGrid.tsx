@@ -313,7 +313,6 @@ export default function ProductGrid() {
                         precio: selectedProduct.precio,
                         image_url: selectedProduct.image_url
                       }, modalQuantity);
-                      setSelectedProduct(null);
                     }}
                     className="w-full py-4 px-6 bg-primary text-white rounded-xl font-black tracking-widest uppercase text-sm shadow-lg shadow-primary/20 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-3"
                   >
