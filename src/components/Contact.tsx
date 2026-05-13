@@ -65,11 +65,11 @@ export default function Contact() {
               <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                 <MapPin size={28} />
               </div>
-              <span className="font-medium text-foreground/80 tracking-wide text-center">Chacabuco, BA</span>
+              <span className="font-medium text-foreground/80 tracking-wide text-center">Chacabuco</span>
             </a>
 
             <a
-              href="mailto:hola@distribuidoramanitos.com"
+              href="mailto:hola@manitos.com"
               aria-label="Contactar por correo electrónico"
               className="flex flex-col items-center justify-center p-8 bg-white/40 backdrop-blur-md rounded-[2rem] border border-white/60 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 gap-4 group"
             >

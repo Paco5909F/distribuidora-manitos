@@ -65,7 +65,7 @@ export default function Footer() {
             <InstagramIcon />
           </a>
           <a
-            href="mailto:hola@distribuidoramanitos.com"
+            href="mailto:hola@manitos.com"
             className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all hover:-translate-y-1"
             aria-label="Correo electrónico"
           >
