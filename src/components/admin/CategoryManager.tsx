@@ -231,7 +231,7 @@ export default function CategoryManager() {
               onClick={resetForm}
               className="text-xs font-bold text-primary hover:text-foreground flex items-center gap-1 uppercase tracking-widest px-3 py-1.5 bg-primary/10 rounded-full transition-colors"
             >
-              <Plus size={14} /> Empezar de cero
+              <Plus size={14} /> CREAR NUEVA
             </button>
           )}
         </div>
