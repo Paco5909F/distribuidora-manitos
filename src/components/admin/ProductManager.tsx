@@ -354,7 +354,11 @@ export default function ProductManager() {
 
               {prodState === "success" && (
                 <div className="flex flex-col gap-2">
-                  {paginatedProducts.map((prod) => (
+                  {paginatedProducts.map((prod) => {
+                    const catObj = categories.find((c) => c.nombre === prod.categoria || c.id === prod.categoria_id);
+                    const isCatActive = catObj ? catObj.activo : true;
+
+                    return (
                     <div
                       key={prod.id}
                       className={`flex items-center justify-between p-3 rounded-lg border transition-all ${editingId === prod.id ? "bg-primary/5 border-primary/20" : "bg-white border-transparent hover:border-gray-200 shadow-sm"}`}
@@ -377,6 +381,7 @@ export default function ProductManager() {
                                 objectFit: "contain",
                                 padding: "2px",
                                 cursor: "zoom-in",
+                                opacity: (!prod.activo || !isCatActive) ? 0.5 : 1,
                               }}
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -398,15 +403,17 @@ export default function ProductManager() {
                           )}
                         </div>
                         <div>
-                          <h3 className={`text-sm font-bold leading-tight ${prod.activo ? "text-foreground" : "text-gray-400 line-through"}`}>
-                            {prod.nombre} {!prod.activo && <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-black uppercase tracking-wider ml-1 relative -top-0.5">Oculto</span>}
+                          <h3 className={`text-sm font-bold leading-tight ${prod.activo && isCatActive ? "text-foreground" : "text-gray-400 line-through"}`}>
+                            {prod.nombre} 
+                            {!prod.activo && <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-black uppercase tracking-wider ml-2 relative -top-0.5">Oculto</span>}
+                            {prod.activo && !isCatActive && <span className="text-[10px] bg-orange-100 text-orange-600 px-1.5 py-0.5 rounded font-black uppercase tracking-wider ml-2 relative -top-0.5">Cat. Oculta</span>}
                           </h3>
                           <div className="flex gap-3 mt-1 items-center">
                             <p className="text-[10px] font-black text-primary uppercase">
                               Precio: ${prod.precio?.toLocaleString("es-AR")}
                             </p>
                             {prod.categoria && (
-                              <p className="text-[10px] font-bold text-gray-400 uppercase">
+                              <p className={`text-[10px] font-bold uppercase ${isCatActive ? "text-gray-400" : "text-orange-500 line-through"}`}>
                                 • {prod.categoria}
                               </p>
                             )}
@@ -454,7 +461,7 @@ export default function ProductManager() {
                         </button>
                       </div>
                     </div>
-                  ))}
+                  )})}
                 </div>
               )}
             </div>
