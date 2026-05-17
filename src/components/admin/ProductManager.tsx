@@ -18,6 +18,7 @@ import { useAdminProducts } from "@/hooks/useAdminProducts";
 import { useAdminCategories } from "@/hooks/useAdminCategories";
 import { Product as DbProduct } from "@/services/products";
 import { toast } from "sonner";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 const processImageLocally = (file: File): Promise<Blob> => {
   return new Promise((resolve, reject) => {
@@ -86,6 +87,13 @@ export default function ProductManager() {
   const [precio, setPrecio] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
   const [file, setFile] = useState<File | null>(null);
+
+  // Modal State
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    type: "product" | "image" | null;
+    id: number | null;
+  }>({ isOpen: false, type: null, id: null });
   const [fileInputKey, setFileInputKey] = useState(Date.now());
 
   const [loading, setLoading] = useState(false);
@@ -234,10 +242,8 @@ export default function ProductManager() {
     setLoading(false);
   };
 
-  const handleDeleteImage = async () => {
+  const executeDeleteImage = async () => {
     if (!editingId) return;
-    if (!confirm("¿Seguro que deseas borrar la imagen de este producto?"))
-      return;
     setLoading(true);
 
     // Tratamos de borrar ambos formatos por si cambió la extensión
@@ -251,15 +257,10 @@ export default function ProductManager() {
     fetchProducts(search, nb);
     setImageError(true);
     setLoading(false);
+    setModalState({ isOpen: false, type: null, id: null });
   };
 
-  const handleDelete = async (id: number) => {
-    if (
-      !confirm(
-        "¿Seguro que deseas eliminar este producto DEFINITIVAMENTE? Esto borrará su imagen y todos sus datos sin posibilidad de recuperación.",
-      )
-    )
-      return;
+  const executeDeleteProduct = async (id: number) => {
     setLoading(true);
     setMsg("Eliminando imagen del bucket...");
 
@@ -282,6 +283,15 @@ export default function ProductManager() {
       toast.error("Error al eliminar el producto");
     }
     setLoading(false);
+    setModalState({ isOpen: false, type: null, id: null });
+  };
+
+  const confirmDeleteAction = () => {
+    if (modalState.type === "image") {
+      executeDeleteImage();
+    } else if (modalState.type === "product" && modalState.id) {
+      executeDeleteProduct(modalState.id);
+    }
   };
 
   return (
@@ -453,7 +463,7 @@ export default function ProductManager() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            handleDelete(prod.id);
+                            setModalState({ isOpen: true, type: "product", id: prod.id });
                           }}
                           className="p-2 text-gray-400 hover:text-red-500 transition-colors bg-gray-50 hover:bg-white rounded-full"
                         >
@@ -588,7 +598,7 @@ export default function ProductManager() {
                 {editingId && !imageError && (
                   <button
                     type="button"
-                    onClick={handleDeleteImage}
+                    onClick={() => setModalState({ isOpen: true, type: "image", id: null })}
                     className="shrink-0 text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-2.5 rounded-xl transition-colors outline-none"
                     title="Eliminar imagen actual del servidor"
                   >
@@ -705,16 +715,30 @@ export default function ProductManager() {
           >
             <X size={24} />
           </button>
-          <div className="relative w-full max-w-4xl h-[80dvh] flex items-center justify-center">
+          <div className="relative w-full max-w-4xl h-[80dvh] flex items-center justify-center" onClick={() => setViewerImage(null)}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={viewerImage}
-              alt="Visor"
-              className="max-w-full max-h-full object-contain rounded-xl shadow-2xl animate-in zoom-in-95 duration-300"
+              alt="Preview Ampliado"
+              className="max-w-[90vw] max-h-[90vh] object-contain select-none animate-in zoom-in-95 duration-200"
+              onClick={(e) => e.stopPropagation()}
             />
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ isOpen: false, type: null, id: null })}
+        onConfirm={confirmDeleteAction}
+        title={modalState.type === "image" ? "Eliminar Imagen" : "Eliminar Producto"}
+        message={
+          modalState.type === "image"
+            ? "¿Seguro que deseas borrar la imagen de este producto?"
+            : "¿Seguro que deseas eliminar este producto DEFINITIVAMENTE? Esto borrará su imagen y todos sus datos sin posibilidad de recuperación."
+        }
+        confirmText="Sí, Eliminar"
+      />
     </>
   );
 }

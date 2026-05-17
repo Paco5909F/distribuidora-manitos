@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Plus, Edit2, Trash2, Search, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import { ConfirmModal } from "../ui/ConfirmModal";
 
 interface Category {
   id: number;
@@ -22,6 +23,9 @@ export default function CategoryManager() {
   // Editor State
   const [editingId, setEditingId] = useState<number | null>(null);
   const [nombre, setNombre] = useState("");
+
+  // Modal State
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
   const fetchCategories = useCallback(async () => {
     const { data } = await supabase
@@ -86,13 +90,9 @@ export default function CategoryManager() {
     setLoading(false);
   };
 
-  const handleDelete = async (id: number) => {
-    if (
-      !confirm(
-        "¿Seguro que deseas eliminar esta categoría? Solo se borrará si no hay productos activos usándola.",
-      )
-    )
-      return;
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
+    const id = deleteTarget;
 
     // Verificar si hay productos activos
     const { data: activeProducts } = await supabase
@@ -222,7 +222,7 @@ export default function CategoryManager() {
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          handleDelete(cat.id);
+                          setDeleteTarget(cat.id);
                         }}
                         className="p-2 text-gray-400 hover:text-red-500 transition-colors bg-gray-50 hover:bg-white rounded-full"
                       >
@@ -293,6 +293,15 @@ export default function CategoryManager() {
           </div>
         </form>
       </div>
+
+      <ConfirmModal
+        isOpen={deleteTarget !== null}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={confirmDelete}
+        title="Eliminar Categoría"
+        message="¿Seguro que deseas eliminar esta categoría? Solo se borrará si no hay productos activos usándola."
+        confirmText="Sí, Eliminar"
+      />
     </div>
   );
 }
