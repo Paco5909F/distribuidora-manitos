@@ -15,6 +15,7 @@ import { createClient } from "@/utils/supabase/client";
 import { useAdminProducts } from "@/hooks/useAdminProducts";
 import { useAdminCategories } from "@/hooks/useAdminCategories";
 import { Product as DbProduct } from "@/services/products";
+import { toast } from "sonner";
 
 const processImageLocally = (file: File): Promise<Blob> => {
   return new Promise((resolve, reject) => {
@@ -142,6 +143,7 @@ export default function ProductManager() {
 
       if (error) {
         setMsg("Error actualizando: " + error.message);
+        toast.error("Error al actualizar producto");
         setLoading(false);
         return;
       }
@@ -162,6 +164,7 @@ export default function ProductManager() {
 
       if (error || !newP) {
         setMsg("Error guardando: " + error?.message);
+        toast.error("Error al guardar producto");
         setLoading(false);
         return;
       }
@@ -186,10 +189,12 @@ export default function ProductManager() {
 
         if (uploadError) {
           setMsg(`Guardado, pero falló la imagen: ${uploadError.message}`);
+          toast.warning("Producto guardado, pero falló la subida de la imagen");
         }
       } catch (err) {
         console.error("Image processing error", err);
         setMsg("Guardado, pero la optimización visual de la imagen falló.");
+        toast.warning("Producto guardado, pero falló la optimización de la imagen");
       }
     }
 
@@ -199,6 +204,7 @@ export default function ProductManager() {
         ? "Producto actualizado exitosamente."
         : "Producto agregado exitosamente.",
     );
+    toast.success(editingId ? "Producto actualizado con éxito" : "Producto creado con éxito");
     fetchProducts(search, nb);
     if (!editingId) resetForm();
     setLoading(false);
@@ -217,6 +223,7 @@ export default function ProductManager() {
 
     const nb = Date.now();
     setMsg("Imagen removida con éxito.");
+    toast.success("Imagen removida con éxito");
     fetchProducts(search, nb);
     setImageError(true);
     setLoading(false);
@@ -243,10 +250,12 @@ export default function ProductManager() {
 
     if (!error) {
       setMsg("Producto e imagen eliminados por completo.");
+      toast.success("Producto eliminado exitosamente");
       fetchProducts(search);
       if (editingId === id) resetForm();
     } else {
       setMsg("Error al eliminar producto: " + error.message);
+      toast.error("Error al eliminar el producto");
     }
     setLoading(false);
   };

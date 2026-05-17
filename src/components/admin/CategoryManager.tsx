@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Plus, Edit2, Trash2, Search, Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
 
 interface Category {
   id: number;
@@ -59,9 +60,12 @@ export default function CategoryManager() {
         .update({ nombre })
         .eq("id", editingId);
 
-      if (error) setMsg("Error: " + error.message);
-      else {
+      if (error) {
+        setMsg("Error: " + error.message);
+        toast.error("Error al guardar categoría");
+      } else {
         setMsg("Categoría actualizada!");
+        toast.success("Categoría actualizada con éxito");
         resetForm();
         fetchCategories();
       }
@@ -69,9 +73,12 @@ export default function CategoryManager() {
       // Crear nueva
       const { error } = await supabase.from("categorias").insert([{ nombre }]);
 
-      if (error) setMsg("Error al crear: " + error.message);
-      else {
+      if (error) {
+        setMsg("Error al crear: " + error.message);
+        toast.error("Error al crear categoría");
+      } else {
         setMsg("¡Categoría creada!");
+        toast.success("Categoría creada con éxito");
         resetForm();
         fetchCategories();
       }
@@ -96,9 +103,7 @@ export default function CategoryManager() {
       .limit(1);
 
     if (activeProducts && activeProducts.length > 0) {
-      alert(
-        "No puedes eliminar esta categoría porque está vinculada a productos ACTIVOS.",
-      );
+      toast.error("No puedes eliminar esta categoría porque está vinculada a productos ACTIVOS.");
       return;
     }
 
@@ -112,10 +117,9 @@ export default function CategoryManager() {
     // Intentar borrar la categoría
     const { error } = await supabase.from("categorias").delete().eq("id", id);
     if (error) {
-      alert(
-        "No puedes eliminar esta categoría por razones de integridad en la base de datos.",
-      );
+      toast.error("No puedes eliminar esta categoría por integridad en la BD.");
     } else {
+      toast.success("Categoría eliminada");
       fetchCategories();
     }
   };
@@ -126,9 +130,10 @@ export default function CategoryManager() {
       .update({ activo: !currentStatus })
       .eq("id", id);
     if (!error) {
+      toast.success(currentStatus ? "Categoría ocultada" : "Categoría visible");
       fetchCategories();
     } else {
-      alert("Error al cambiar visibilidad");
+      toast.error("Error al cambiar visibilidad");
     }
   };
 
