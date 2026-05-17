@@ -84,6 +84,7 @@ export default function ProductManager() {
   const [precio, setPrecio] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [fileInputKey, setFileInputKey] = useState(Date.now());
 
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
@@ -103,6 +104,7 @@ export default function ProductManager() {
     setPrecio("");
     setCategoriaId("");
     setFile(null);
+    setFileInputKey(Date.now());
     setMsg("");
     setImageError(false);
   };
@@ -113,6 +115,7 @@ export default function ProductManager() {
     setPrecio(prod.precio?.toString() || "");
     setCategoriaId(prod.categoria_id?.toString() || "");
     setFile(null);
+    setFileInputKey(Date.now());
     setMsg("");
     setImageError(false);
   };
@@ -206,7 +209,12 @@ export default function ProductManager() {
     );
     toast.success(editingId ? "Producto actualizado con éxito" : "Producto creado con éxito");
     fetchProducts(search, nb);
-    if (!editingId) resetForm();
+    if (!editingId) {
+      resetForm();
+    } else {
+      setFile(null);
+      setFileInputKey(Date.now());
+    }
     setLoading(false);
   };
 
@@ -520,6 +528,7 @@ export default function ProductManager() {
               </label>
               <div className="flex items-center gap-4">
                 <input
+                  key={fileInputKey}
                   type="file"
                   accept="image/*"
                   onChange={(e) =>
