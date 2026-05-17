@@ -7,6 +7,7 @@ import { Search, Plus, Trash2, FileDown } from "lucide-react";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import dynamic from "next/dynamic";
 import type { BudgetItem, BudgetData } from "@/components/admin/BudgetPDF";
+import { useAdminCategories } from "@/hooks/useAdminCategories";
 
 // Importamos aislando totalmente el motor PDF de Next.js
 const PDFButton = dynamic(() => import("@/components/admin/PDFButton"), {
@@ -48,6 +49,7 @@ export default function PresupuestosPage() {
   const [loadingSearch, setLoadingSearch] = useState(false);
 
   const [items, setItems] = useState<BudgetItem[]>([]);
+  const { categories } = useAdminCategories();
 
   useEffect(() => {
     if (search.length < 2) {
@@ -68,8 +70,7 @@ export default function PresupuestosPage() {
           categoria,
           activo
         `,
-        )
-        .eq("activo", true);
+        );
 
       query = applySmartSearch(query, search);
       const { data, error } = await query.limit(50);
@@ -384,12 +385,26 @@ export default function PresupuestosPage() {
                       className="w-full text-left p-4 hover:bg-gray-50 border-b border-gray-50 last:border-0 flex items-center justify-between group transition-colors"
                     >
                       <div className="flex flex-col pr-4">
-                        <span className="text-sm font-bold text-foreground line-clamp-1">
-                          {prod.nombre}
-                        </span>
-                        <span className="text-xs font-semibold text-primary">
-                          {prod.categoria}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-sm font-bold line-clamp-1 ${!prod.activo ? "text-gray-400 line-through" : "text-foreground"}`}>
+                            {prod.nombre}
+                          </span>
+                          {!prod.activo && (
+                            <span className="text-[9px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
+                              Oculto
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className={`text-xs font-semibold ${categories.find((c) => c.nombre === prod.categoria)?.activo === false ? "text-gray-400 line-through" : "text-primary"}`}>
+                            {prod.categoria}
+                          </span>
+                          {categories.find((c) => c.nombre === prod.categoria)?.activo === false && (
+                            <span className="text-[9px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
+                              Cat. Oculta
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-black whitespace-nowrap">
