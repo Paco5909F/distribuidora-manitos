@@ -191,9 +191,12 @@ export default function CategoryManager() {
                     </div>
                     <div className="flex items-center gap-2 px-2 shrink-0">
                       <button
-                        onClick={() =>
-                          handleToggleVisibility(cat.id, cat.activo)
-                        }
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleToggleVisibility(cat.id, Boolean(cat.activo));
+                        }}
                         className={`p-2 transition-colors bg-gray-50 hover:bg-white rounded-full ${cat.activo ? "text-primary hover:text-primary" : "text-gray-400 hover:text-foreground"}`}
                         title={
                           cat.activo
@@ -204,13 +207,23 @@ export default function CategoryManager() {
                         {cat.activo ? <Eye size={16} /> : <EyeOff size={16} />}
                       </button>
                       <button
-                        onClick={() => selectForEdit(cat)}
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          selectForEdit(cat);
+                        }}
                         className="p-2 text-gray-400 hover:text-primary transition-colors bg-gray-50 hover:bg-white rounded-full"
                       >
                         <Edit2 size={16} />
                       </button>
                       <button
-                        onClick={() => handleDelete(cat.id)}
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleDelete(cat.id);
+                        }}
                         className="p-2 text-gray-400 hover:text-red-500 transition-colors bg-gray-50 hover:bg-white rounded-full"
                       >
                         <Trash2 size={16} />
