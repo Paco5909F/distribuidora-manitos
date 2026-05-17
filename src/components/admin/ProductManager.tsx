@@ -404,17 +404,17 @@ export default function ProductManager() {
                         </div>
                         <div>
                           <h3 className={`text-sm font-bold leading-tight ${prod.activo && isCatActive ? "text-foreground" : "text-gray-400 line-through"}`}>
-                            {prod.nombre} 
-                            {!prod.activo && <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-black uppercase tracking-wider ml-2 relative -top-0.5">Oculto</span>}
-                            {prod.activo && !isCatActive && <span className="text-[10px] bg-orange-100 text-orange-600 px-1.5 py-0.5 rounded font-black uppercase tracking-wider ml-2 relative -top-0.5">Cat. Oculta</span>}
+                            {prod.nombre}
                           </h3>
                           <div className="flex gap-3 mt-1 items-center">
-                            <p className="text-[10px] font-black text-primary uppercase">
+                            <p className={`text-[10px] font-black uppercase ${prod.activo && isCatActive ? "text-primary" : "text-gray-400"}`}>
                               Precio: ${prod.precio?.toLocaleString("es-AR")}
                             </p>
                             {prod.categoria && (
-                              <p className={`text-[10px] font-bold uppercase ${isCatActive ? "text-gray-400" : "text-orange-500 line-through"}`}>
+                              <p className="text-[10px] font-bold text-gray-400 uppercase">
                                 • {prod.categoria}
+                                {!isCatActive && " (INACTIVA)"}
+                                {!prod.activo && " • OCULTO"}
                               </p>
                             )}
                           </div>
