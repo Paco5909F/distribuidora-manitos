@@ -10,6 +10,8 @@ import {
   AlertCircle,
   RefreshCw,
   X,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { useAdminProducts } from "@/hooks/useAdminProducts";
@@ -125,6 +127,20 @@ export default function ProductManager() {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
+
+  const handleToggleVisibility = async (id: number, currentStatus: boolean) => {
+    const { error } = await supabase
+      .from("productos")
+      .update({ activo: !currentStatus })
+      .eq("id", id);
+    if (!error) {
+      toast.success(currentStatus ? "Producto ocultado" : "Producto visible");
+      const nb = Date.now();
+      fetchProducts(search, nb);
+    } else {
+      toast.error("Error al cambiar visibilidad");
+    }
+  };
 
   const handleSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -382,8 +398,8 @@ export default function ProductManager() {
                           )}
                         </div>
                         <div>
-                          <h3 className="text-sm font-bold text-foreground leading-tight">
-                            {prod.nombre}
+                          <h3 className={`text-sm font-bold leading-tight ${prod.activo ? "text-foreground" : "text-gray-400 line-through"}`}>
+                            {prod.nombre} {!prod.activo && <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-black uppercase tracking-wider ml-1 relative -top-0.5">Oculto</span>}
                           </h3>
                           <div className="flex gap-3 mt-1 items-center">
                             <p className="text-[10px] font-black text-primary uppercase">
@@ -399,13 +415,39 @@ export default function ProductManager() {
                       </div>
                       <div className="flex items-center gap-2 px-2 shrink-0">
                         <button
-                          onClick={() => selectForEdit(prod)}
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleToggleVisibility(prod.id, Boolean(prod.activo));
+                          }}
+                          className={`p-2 transition-colors bg-gray-50 hover:bg-white rounded-full ${prod.activo ? "text-primary hover:text-primary" : "text-gray-400 hover:text-foreground"}`}
+                          title={
+                            prod.activo
+                              ? "Ocultar producto del catálogo público"
+                              : "Mostrar producto en el catálogo público"
+                          }
+                        >
+                          {prod.activo ? <Eye size={16} /> : <EyeOff size={16} />}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            selectForEdit(prod);
+                          }}
                           className="p-2 text-gray-400 hover:text-primary transition-colors bg-gray-50 hover:bg-white rounded-full"
                         >
                           <Edit2 size={16} />
                         </button>
                         <button
-                          onClick={() => handleDelete(prod.id)}
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleDelete(prod.id);
+                          }}
                           className="p-2 text-gray-400 hover:text-red-500 transition-colors bg-gray-50 hover:bg-white rounded-full"
                         >
                           <Trash2 size={16} />

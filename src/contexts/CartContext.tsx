@@ -102,6 +102,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       if (error) throw error;
 
+      const { data: activeCatData, error: catError } = await supabase
+        .from("categorias")
+        .select("nombre")
+        .eq("activo", true);
+
+      if (catError) throw catError;
+      const activeCategoryNames = activeCatData ? activeCatData.map((c) => c.nombre) : [];
+
       let hasChanges = false;
       const messages: string[] = [];
 
@@ -110,7 +118,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           const dbItem = dbProducts?.find((p) => p.id === item.id);
 
           // Producto no existe o fue desactivado
-          if (!dbItem || !dbItem.activo) {
+          const isCategoryActive = dbItem ? activeCategoryNames.includes(dbItem.categoria) : false;
+
+          if (!dbItem || !dbItem.activo || !isCategoryActive) {
             hasChanges = true;
             messages.push(
               `El producto "${item.nombre}" ya no está disponible y fue removido.`,

@@ -46,7 +46,6 @@ export function useAdminProducts(): UseAdminProductsResult {
           activo
         `,
             )
-            .eq("activo", true)
             .order("nombre");
 
           let from = 0;
