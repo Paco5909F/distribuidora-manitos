@@ -8,6 +8,7 @@ import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import dynamic from "next/dynamic";
 import type { BudgetItem, BudgetData } from "@/components/admin/BudgetPDF";
 import { useAdminCategories } from "@/hooks/useAdminCategories";
+import { toast } from "sonner";
 
 // Importamos aislando totalmente el motor PDF de Next.js
 const PDFButton = dynamic(() => import("@/components/admin/PDFButton"), {
@@ -561,8 +562,8 @@ export default function PresupuestosPage() {
                   {!cliente.trim() ? (
                     <button
                       onClick={() =>
-                        alert(
-                          "⚠️ Por favor, ingresa el Nombre del Cliente en la parte superior antes de generar el presupuesto.",
+                        toast.warning(
+                          "Por favor, ingresa el Nombre del Cliente en la parte superior antes de generar el presupuesto.",
                         )
                       }
                       className="w-full flex items-center justify-center gap-3 py-4 bg-gray-200 text-gray-400 rounded-xl font-bold uppercase tracking-widest text-sm cursor-not-allowed"
@@ -576,8 +577,8 @@ export default function PresupuestosPage() {
                   {!cliente.trim() ? (
                     <button
                       onClick={() =>
-                        alert(
-                          "⚠️ Por favor, ingresa el Nombre del Cliente en la parte superior antes de enviarlo por WhatsApp.",
+                        toast.warning(
+                          "Por favor, ingresa el Nombre del Cliente en la parte superior antes de enviarlo por WhatsApp.",
                         )
                       }
                       className="w-full flex items-center justify-center gap-2 py-4 bg-gray-200 text-gray-400 rounded-xl font-bold uppercase tracking-widest text-xs sm:text-sm cursor-not-allowed"

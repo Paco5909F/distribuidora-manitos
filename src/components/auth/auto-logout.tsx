@@ -3,6 +3,7 @@
 import { useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
+import { toast } from "sonner";
 
 const TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
 
@@ -26,8 +27,8 @@ export function AutoLogout() {
 
       if (session) {
         await supabase.auth.signOut();
-        alert("Por seguridad, su sesión ha expirado por inactividad.");
-        window.location.href = "/login";
+        toast.error("Por seguridad, su sesión ha expirado por inactividad.");
+        router.push("/login");
       }
     };
 
