@@ -35,7 +35,7 @@ export default function Footer() {
               width={40}
               height={40}
               priority
-              className="group-hover:scale-110 transition-transform"
+              className="w-auto h-auto group-hover:scale-110 transition-transform"
             />
             <span className="font-heading text-xl font-bold text-white">
               {TENANT_CONFIG.name}
