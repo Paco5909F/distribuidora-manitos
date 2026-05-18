@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 
@@ -8,7 +8,7 @@ const TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
 
 export function AutoLogout() {
   const router = useRouter();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {

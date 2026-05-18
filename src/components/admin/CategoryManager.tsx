@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Plus, Edit2, Trash2, Search, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
@@ -14,7 +14,7 @@ interface Category {
 }
 
 export default function CategoryManager() {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const [categories, setCategories] = useState<Category[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Search,
   Plus,
@@ -63,7 +63,7 @@ const processImageLocally = (file: File): Promise<Blob> => {
 };
 
 export default function ProductManager() {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   // Custom Hooks para abstracción y manejo de estados (Loading, Error, Empty, Success)
   const { categories } = useAdminCategories();
