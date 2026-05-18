@@ -17,6 +17,7 @@ export default function Home() {
             src="/brand/logo.png"
             alt="Distribuidora Manitos Logo"
             fill
+            sizes="(max-width: 768px) 200px, 320px"
             className="object-contain"
             priority
           />
