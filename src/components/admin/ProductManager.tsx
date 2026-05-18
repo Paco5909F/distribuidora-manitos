@@ -276,7 +276,8 @@ export default function ProductManager() {
     if (!error) {
       setMsg("Producto e imagen eliminados por completo.");
       toast.success("Producto eliminado exitosamente");
-      fetchProducts(search);
+      const nb = Date.now();
+      fetchProducts(search, nb);
       if (editingId === id) resetForm();
     } else {
       setMsg("Error al eliminar producto: " + error.message);
